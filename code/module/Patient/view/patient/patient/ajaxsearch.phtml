@@ -1,0 +1,16 @@
+<?php if($this->patients): ?>
+
+    <?php foreach($this->patients as $patient) :  ?>
+        <form method="post" action="consultation.php" id="form-<?php echo $patient->getId(); ?>">
+            <!--<a href="progressandgraphs.php?patientId=<?php echo $patient->getId();?>"
+              class="button-link name-patient" onclick="form-<?php echo $patient->getId(); ?>.submit()">
+<?php echo $patient->getName();?></a>-->
+            <button type="submit" name="action" value="" class="button-link name-patient">
+                <span class="patient-id"><?php echo $patient->getId();?></span>
+                <span><?php echo $patient->getName();?></span>
+            </button>
+            <input type="hidden" name="id" value="<?php echo $patient->getId(); ?>"/>
+        </form>
+
+    <?php endforeach; ?>
+<?php endif; ?>

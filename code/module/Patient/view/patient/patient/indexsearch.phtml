@@ -1,0 +1,73 @@
+<div class="form wrapper-small">
+
+    <div class="dashboard">
+        <h1>Patient List</h1>
+        <div class="form-search">
+
+            <input id="search" type="text" name="q" value="" class="input-text" maxlength="128" autocomplete="off" placeholder="Search">
+            <button type="submit" title="Search" class="button search-bt"><span><span><i class="fa fa-search"></i> </span></span></button>
+
+            <div id="search_autocomplete" class="search-autocomplete" style="display: none;"></div>
+
+
+        </div>
+        <div class="pateints-list">
+            <?php if($this->patients): ?>
+
+            <?php foreach($this->patients as $patient) :  ?>
+                <form method="post" action="/patient/view" id="form-<?php echo $patient->getId(); ?>">
+
+                    <button type="submit" name="action" value="" class="button-link name-patient">
+                        <span class="patient-id"><?php echo $patient->getId();?></span>
+                        <span><?php echo $patient->getName();?></span>
+                    </button>
+                    <input type="hidden" name="id" value="<?php echo $patient->getId(); ?>"/>
+                </form>
+
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        $('#search').keyup(function(){
+            search();
+        });
+        $('.search-bt').click(function(event){
+            event.preventDefault();
+            search();
+        })
+
+        function search() {
+            $.ajax({
+                url:'/patient/ajaxsearch',
+                type:'POST',
+                dataType: 'json',
+                data: {search:$('#search').val()},
+            }).done(function( data ) {
+                var html = '',
+                patients = data['patients'];
+
+                for(patient in patients) {
+
+                    if(patients[patient].hasOwnProperty('id')) {
+                       html+='<form method="post" action="/patient/view" id="form-'+patients[patient]['id']+'">';
+
+                        html+='<button type="submit" name="action" value="" class="button-link name-patient">';
+                        html+=' <span class="patient-id">'+patients[patient]['id']+'</span>';
+                        html+='  <span>'+patients[patient]['name']+'</span>';
+                        html+=' </button>'
+                        html+='  <input type="hidden" name="id" value="'+patients[patient]['id']+'"/>';
+                       html+='</form>';
+                    }
+
+                }
+                $('.pateints-list').html(html);
+            });
+        }
+
+    });
+</script>

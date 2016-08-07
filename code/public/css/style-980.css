@@ -1,0 +1,17 @@
+@media only screen and (min-width: 980px) {
+    .container {
+        position: relative;
+        z-index: 1;
+        margin: 0 auto;
+    }
+    .navbar-brand
+        .fa-user-md {
+            font-size: 1em;
+        padding-right: 10px;
+        }
+    .wrapper-small {
+        max-width: 450px;
+        margin: 0 auto;
+    }
+
+}

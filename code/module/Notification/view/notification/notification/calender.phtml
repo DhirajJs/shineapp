@@ -1,0 +1,45 @@
+<div class="form2 details-patient">
+
+    <div class="dashboard">
+        <h1></h1>
+
+    </div>
+    <div id='calendar' class="fc fc-unthemed fc-ltr"></div>
+
+</div>
+<div id='calendar' class="fc fc-unthemed fc-ltr"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<link href='/css/fullcalendar.css' rel='stylesheet' />
+<?php echo $this->headScript()
+    ->prependFile($this->basePath() . '/js/moment.js'); ?>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.0/fullcalendar.min.js" ></script>
+
+<script>
+    $(document).ready(function() {
+
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,basicWeek,basicDay'
+            },
+            defaultDate: '<?php echo @date("Y-m-d",@strtotime("now")); ?>',
+            editable: true,
+            businessHours: true, // display business hours
+
+            eventLimit: true, // allow "more" link when too many events
+            events: [
+                <?php foreach ($this->calender  as $row): ?>
+                {
+                    title: "<?php echo $row['name']; ?>|<?php echo $row['phone']; ?>",
+                    start: "<?php echo @date('Y-m-d',@strtotime($row['date']));?>T<?php echo @date('H:i',@strtotime($row['date'])); ?>",
+                    end: '<?php echo @date('Y-m-d',@strtotime($row['date']));?>T<?php echo @date('H:i',@strtotime($row['date'])+3600);?>',
+                    color: '#257e4a'
+                },
+                <?php endforeach; ?>
+            ]
+        });
+
+    });
+
+</script>

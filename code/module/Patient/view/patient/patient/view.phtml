@@ -1,0 +1,256 @@
+<div class="form">
+    <?php
+        if ($this->errorMessages) {
+            echo '<ul class="error">';
+            foreach ($this->errorMessages as $message) {
+                echo '<li>' . $message . '</li>';
+            }
+            echo '</ul>';
+        }
+        if ($this->successMessage) {
+            echo '<ul class="success">';
+            foreach ($this->successMessage as $message) {
+                echo '<li>' . $message . '</li>';
+            }
+            echo '</ul>';
+        }
+
+
+
+    ?>
+    <div class="dashboard">
+        <div class="container-patient">
+
+            <div class="col-1">
+                <div class="patient-details">
+                    <?php if($this->patientDetails['details']): ?>
+
+                        <div class="chat-panel panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-info-circle fa-fw"></i>
+                                Pateint Info
+                                <i class="fa fa-edit fa-fw" data-toggle="modal" data-target="#formEdit"></i>
+
+                            </div>
+                            <div class="panel-body">
+                                <ul class="chat">
+                                    <li class="left clearfix">
+                        <span class="chat-img pull-left">
+                          <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle">
+                        </span>
+                                        <div class="chat-body clearfix">
+                                            <div class="header">
+                                                <strong
+                                                    class="primary-font"><?php echo $this->patientDetails['details']['name'] ?></strong>
+                                                <small class="pull-right text-muted">
+                                                    <i class="fa fa-envelope-o fa-fw"></i> <?php echo $this->patientDetails['details']['email'] ?>
+                                                </small>
+                                            </div>
+                                            <p>
+                                                <?php if ($this->patientDetails['details']['gender'] == 'M'): ?>
+                                                    Male &nbsp;
+                                                <?php else: ?>
+                                                    Female &nbsp;
+                                                <?php endif; ?>
+                                                <?php
+                                                    // $str = @strtotime('now') - (@strtotime($row['dob']));
+                                                    echo $this->patientDetails['details']['age'] ?> years old </p>
+                                            <p>
+                                                <?php echo $this->patientDetails['details']['phone'] ?>
+                                            </p>
+                                            <p>
+                                            <address>
+                                                <?php echo $this->patientDetails['details']['address'] ?>
+                                            </address>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        <?php endif; ?>
+                </div>
+                <?php if($this->patientDetails['medication']): ?>
+                <div class="medication">
+
+                    <div class="">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-info-circle fa-fw"></i>  Consultation Details
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>BMI</th>
+                                            <th>Medication</th>
+                                            <th>Date</th>
+                                            <th>Consultation comment</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php foreach ($this->patientDetails['medication'] as $medication): ?>
+                                            <tr>
+                                                <td><?php echo $medication['bmi']; ?></td>
+                                                <td><?php echo $medication['medication']; ?></td>
+                                                <td><?php echo $medication['date']; ?></td>
+                                                <td><?php echo $medication['consultation_details']; ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive -->
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+
+            </div><!--col-1-->
+
+        </div><!--end of patient-container-->
+                <?php endif;?>
+    </div><!-- end of dashboard-->
+            <div class="col-2">
+                <div class="diabetes-model" data-remodal-id="diabetes">
+                    <div id="chart_div_diabetes"></div>
+                </div>
+                <div class="diabetes-model" data-remodal-id="bloodpressure">
+                    <div id="chart_div_bp"></div>
+                </div>
+            </div>
+</div>
+
+
+<div class="modal fade " id="formEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Edit</h4>
+            </div>
+            <?php
+                 ?>
+            <form method="POST" action="/patient/update" class="login-form">
+                <div class="modal-body">
+                    <div class="dashboard form">
+                        <p class="field">Name</p>
+                        <input type="text" name="name" placeholder="name" data-validation="length" data-validation-length="min4" value="<?php echo $this->patientDetails['details']['name'] ?>"/>
+                        <p class="field">Email</p>
+                        <input type="email" name="email" placeholder="email address" data-validation="email" value="<?php echo $this->patientDetails['details']['email'] ?>"/>
+                        <p class="field">Date of birth</p>
+                        <input type="date" name="dob"  value="<?php echo $this->patientDetails['details']['dob'] ?>"/>
+                        <p class="field">Gender</p>
+                        <select name="gender">
+                            <option value="M" <?php if($this->patientDetails['details']['gender'] == 'M'){ echo ' selected="selected"'; } ?>>Male</option>
+                            <option value="F" <?php if($this->patientDetails['details']['gender'] == 'F'){ echo ' selected="selected"'; } ?>>Female</option>
+                        </select>
+                        <p class="field">Telephone</p>
+                        <input type="text" name="phone" placeholder="phone" data-validation="length" data-validation-length="min7" value="<?php echo $this->patientDetails['details']['phone'] ?>"/>
+                        <p class="field">Address</p>
+                        <input type="text" name="address" placeholder="address" value="<?php echo $this->patientDetails['details']['address'] ?>"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" value="<?php echo $this->patientDetails['details']['id'] ?>" name="id" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="update">Save changes</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('#formEdit').appendTo($('body'));
+    })
+
+    google.charts.load('current', {
+        packages: ['corechart', 'line']
+    });
+    google.charts.setOnLoadCallback(drawBasicDiabeted);
+    google.charts.setOnLoadCallback(drawBasicBloodPressure);
+
+    function drawBasicDiabeted() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', 'Diabetes progess');
+        var diabetesAr = new Array();
+        <?php
+        $array = array();
+        foreach ($this->patientDetails['diabetes'] as $diabetes) {
+
+            $time =  @date('d', @strtotime($diabetes['date']));
+            $array[] = "[{$time},{$diabetes['bloodSugarLevel']}]";
+        }
+        $addRow = implode(',',$array);
+        ?>
+        data.addRows([<?php echo $addRow ?>]);
+        var options = {
+            hAxis: {
+                title: 'Day'
+            },
+            vAxis: {
+                title: 'Blood Sugar Level'
+            },
+            width: 500,
+            chartArea: {
+                width: "50%",
+                height: "70%"
+            },
+            x: {
+                0: {
+                    side: 'top'
+                }
+            }
+        };
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div_diabetes'));
+        chart.draw(data, options);
+    }
+
+    function drawBasicBloodPressure() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Day');
+        data.addColumn('number', 'Systolic');
+        data.addColumn('number', 'Diastolic');
+        //systolic`, `diastolic`, `patientId`, `heartRate`
+        var bpl = new Array();
+        <?php
+        $array = array();
+        foreach ($this->patientDetails['bloodPresure'] as $bloodPresure) {
+            $time =  @date('d', @strtotime($bloodPresure['date']));
+            $array[] = "[{$time},{$bloodPresure['systolic']},{$bloodPresure['diastolic']}]";
+        }
+        $addRow = implode(',',$array);
+        ?>
+        data.addRows([<?php echo $addRow ?>]);
+        var options = {
+            hAxis: {
+                title: 'Day'
+            },
+            vAxis: {
+                title: 'Blood Pressure'
+            },
+            width: 500,
+            chartArea: {
+                width: "50%",
+                height: "70%"
+            },
+            x: {
+                0: {
+                    side: 'top'
+                }
+            }
+        };
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div_bp'));
+        chart.draw(data, options);
+    }
+</script>

@@ -1,0 +1,37 @@
+<div class="form wrapper-small" >
+    <?php
+        if ($this->successMessage){
+            echo '<ul class="success">';
+            foreach($this->successMessage as $message)
+            {
+                echo '<li>'.$message.'</li>';
+            }
+            echo '</ul>';
+        }
+    ?>
+    <div class="dashboard">
+        <form method="post" action="/notification/save">
+
+            <p class="field">patientId:</p>
+            <select name="patientId" placeholder="patientId">
+
+                <?php foreach ($this->patient as $row): ?>
+                   <option value="<?php echo $row['patientId'] ?>" >
+                       <?php echo $row['patientId'] ?> &nbsp;| &nbsp;
+                       <?php echo $row['name'] ?>
+                   </option>
+                <?php endforeach; ?>
+
+                </select>
+
+            <p class="field"> set date and time:</p>
+            <input type="datetime-local" name="datetime" placeholder="Set date and time"/>
+            <p class="field"> Description:</p>
+            <input type="text" name="request" placeholder="Reason for appointment"/>
+            <button type="submit" name="add_new" value="add">
+                Add
+            </button>
+        </form>
+
+    </div>
+</div>

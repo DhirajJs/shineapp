@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login Form</title>
+    <link rel="stylesheet" href="skin/css/reset.css">
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900'>
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Montserrat:400,700'>
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic'
+          rel='stylesheet' type='text/css'>
+    <link href="skin/bootstrap/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="skin/css/style.css">
+    <link rel="stylesheet" href="skin/css/font-awesome.min.css">
+</head>
+<body>
+<div class="form login">
+    <div class="thumbnail"><i class="fa fa-user-md" aria-hidden="true"></i></div>
+   <ul class="" id="message" style="display:none">
+   <li></li>
+   </ul>
+    <form method="POST" action="signin.php" class="login-form">
+        <input type="text" name="username" placeholder="username" data-validation="length" data-validation-length="max100" required />
+        <input type="password" name="password" placeholder="password" data-validation="length" data-validation-length="max100" required />
+        <button type="submit" id="login">login</button>
+
+        
+    </form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script src="skin/js/index.js"></script>
+<script src="skin/js/jquery.form-validator.min.js"></script>
+<script src="skin/js/jquery.smartPlaceholder.min.js"></script>
+
+ <script type="text/javascript">
+ 
+    $(function() {
+          
+        
+   
+
+        $("#login").click(function(event) {
+            event.preventDefault();
+
+            var dataString = "username=" + $('input[name=username]').val() + "&password=" + $('input[name=password]').val() ;
+            
+                $.ajax({
+                    type: "POST",
+                    url: "http://shine.app/user/accessajax",
+                    data: dataString,
+                    crossDomain: true,
+                    cache: false,
+                    dataType:'json',
+                    beforeSend: function() {
+                        $("#login").val('Connecting...');
+                         $('#message').hide();
+                    },
+                    success: function(data) {
+                        console.log(data);
+                         if (data.status == "error") {
+                            $('#message').show().addClass('error').children('li').html(data.message)
+                            $("#login").val('login');
+
+                        // } else if (data == "error") {
+                        //     alert("error");
+                        //     
+                         }else {
+                            window.location = '/dashboard.html';
+                             manageCookie.setCookie('login', true,1);
+                             manageCookie.setCookie('user', data.id,1);
+                             manageCookie.setCookie('dbid', data.dbId,1);
+                         }
+                    },
+                    complete: function (data) {
+                       // $('#console').html(data);
+                       //  $("#login").val('Connecting...');
+                    },
+                    error:function(data,status,errorThrown) {
+                      // $('#console').html(errorThrown); 
+                      
+                    }
+
+                });
+            
+              });
+         });
+    
+ </script>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<div class="form wrapper-small">
+    <?php
+        if ($this->successMessage){
+            echo '<ul class="success">';
+            foreach($this->successMessage as $message)
+            {
+                echo '<li>'.$message.'</li>';
+            }
+            echo '</ul>';
+        }
+    ?>
+    <div class="dashboard">
+        <form method="POST" action="/patient/save" class="login-form">
+            <input type="text" name="name" placeholder="name" data-validation="length" data-validation-length="min4"/>
+            <input type="text" name="username" placeholder="username" data-validation="length" data-validation-length="min4"/>
+            <input type="password" name="password" placeholder="password" data-validation="length" data-validation-length="min4"/>
+            <input type="email" name="email" placeholder="email address" data-validation="email"/>
+            <input type="date" name="dob" placeholder="date of birth"/>
+            <select id="gender" name="gender" class="form-control">
+                <option value="M" class="selected">Male</option>
+                <option value="F" >Female</option>
+            </select>
+            <input type="text" name="phone" placeholder="phone" data-validation="length" data-validation-length="min7"/>
+            <input type="text" name="address" placeholder="address"/>
+            <input type="text" name="userId" placeholder="user id"/>
+            <button type="submit">create</button>
+
+        </form>
+    </div>
+</div>

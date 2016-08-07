@@ -1,0 +1,40 @@
+<div class="form">
+    <?php
+        if ($this->errorMessages){
+            echo '<ul class="error">';
+            foreach($this->errorMessages as $message)
+            {
+                echo '<li>'.$message.'</li>';
+            }
+            echo '</ul>';
+        }
+        if ($this->successMessage){
+            echo '<ul class="success">';
+            foreach($this->errorMessages as $message)
+            {
+                echo '<li>'.$message.'</li>';
+            }
+            echo '</ul>';
+        }
+    ?>
+    <div class="thumbnail"><i class="fa fa-user-md" aria-hidden="true"></i></div>
+    <form method="POST" action="signup.php" class="register-form" id="registration">
+        <input type="text" name="name" placeholder="name" data-validation="length" data-validation-length="min4"/>
+        <input type="text" name="username" placeholder="username" data-validation="length" data-validation-length="min4"/>
+        <input type="password" name="password" placeholder="password" data-validation="length" data-validation-length="min4"/>
+        <input type="email" name="email" placeholder="email address" data-validation="email"/>
+        <input type="date" name="dob" placeholder="date of birth"/>
+        <input type="text" name="phone" placeholder="phone" data-validation="length" data-validation-length="min7"/>
+        <input type="text" name="address" placeholder="address"/>
+
+        <button type="submit">create</button>
+        <p class="message">Already registered? <a href="#">Sign In</a></p>
+    </form>
+    <form method="POST" action="/user/access" class="login-form">
+        <input type="text" name="username" placeholder="username" data-validation="length" data-validation-length="max100"/>
+        <input type="password" name="password" placeholder="password" data-validation="length" data-validation-length="max100"/>
+        <button type="submit">login</button>
+
+        <p class="message">Not registered? <a href="#">Create an account</a></p>
+    </form>
+</div>

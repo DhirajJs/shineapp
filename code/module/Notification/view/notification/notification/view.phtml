@@ -1,0 +1,93 @@
+<?php
+    if ($this->successMessage){
+        echo '<ul class="success">';
+        foreach($this->successMessage as $message)
+        {
+            echo '<li>'.$message.'</li>';
+        }
+        echo '</ul>';
+    }
+?>
+
+<div class="form details-patient wrapper-small">
+
+
+    <div class="dashboard">
+
+        <div class="notifications-panel">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bell fa-fw"></i> Notifications Panel
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="list-group">
+                        <?php foreach ($notification as $row): ?>
+                            <div href="#" class="list-group-item">
+                                <i class="fa fa-tasks fa-fw"></i>
+                                <span><strong><?php echo $row['name']; ?></strong></span>
+
+                                <span class="pull-right text-muted small"><em><?php echo $row['date']; ?></em>
+                                          </span>
+                                <!-- <p>
+                                            <i class="fa fa-envelope fa-fw"></i>  <span><?php echo $row['email']; ?></span>
+                                          </p>
+                                          <p>
+                                            <i class="fa  fa-phone fa-fw"></i>  <span><?php echo $row['phone']; ?></span>
+                                          </p> -->
+
+                                <p><span><?php echo $row['request']; ?></span></p>
+
+                                <?php if ($row['approved'] == 'N'): ?>
+
+
+                                    <label>Approve Request<input type="checkbox" class="ios-switch green tinyswitch"
+                                                                 data-id="<?php echo $row['notif_id']; ?>"/>
+                                        <div>
+                                            <div></div>
+                                        </div>
+                                    </label>
+                                    <div class="form-approve" id="form-<?php echo $row['notif_id']; ?>">
+                                        <form method="post"
+                                              action="/notification/approve">
+                                            Set Appointment Time<input type="datetime-local" name="datetime">
+                                            <input type="submit" name="approvedNow" value="Approve"/>
+                                            <input type="hidden" name="notif_id"
+                                                   value="<?php echo $row['notif_id']; ?>"/>
+                                            <input type="hidden" name="patientId"
+                                                   value="<?php echo $row['patientId']; ?>"/>
+                                        </form>
+                                    </div>
+
+                                <?php else: ?>
+                                    <p><i class="fa fa-check-circle fa-fw approve-fa"></i><span>Approved</span></p>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
+                </div>
+                <!-- /.panel-body -->
+            </div>
+
+        </div>
+
+
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        $('.ios-switch').click(function(){
+            var $_self = $(this);
+            var form = $('#form-'+$_self.data('id'));
+            if($_self.is(':checked')) {
+
+                form.slideDown();
+            }else {
+                form.slideUp();
+            }
+        })
+    })
+</script>

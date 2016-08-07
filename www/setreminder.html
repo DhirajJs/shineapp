@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login Form</title>
+    <link rel="stylesheet" href="skin/css/reset.css">
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900'>
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Montserrat:400,700'>
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic'
+          rel='stylesheet' type='text/css'>
+    <link href="skin/bootstrap/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="skin/css/style.css">
+    <link rel="stylesheet" href="skin/css/font-awesome.min.css">
+    <link href="skin/css/bootstrap-material-design.css" rel="stylesheet">
+  <link href="skin/css/ripples.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="skin/css/bootstrap-clockpicker.min.css">
+</head>
+<body>
+<div class="form dashboard">
+    <div class="dt-title"><i class="fa fa-user-md" aria-hidden="true"></i> Reminder</div>
+     
+    <ul class="nav setting-nav" id="side-menu">
+
+                   <li>
+                    <div class="well page active" id="fileinput" style="display: block;">
+            
+        <form method="post" action="">
+            <div class="form-group label-static is-empty">
+                <label for="reminder" class="control-label">Description</label>
+                <input type="text"  required class="form-control" id="reminder" name="reminder" placeholder="Description">
+
+                <p class="help-block">Please enter a reminder</p>
+              </div>
+              <div class="form-group label-static is-empty clockpicker">
+                <label for="time" class="control-label">Time</label>
+                <input type="text"  required class="form-control" id="time" name="time" placeholder="Time">
+       
+
+                <!-- <p class="help-block">Please enter a valid email address<code>john@gmail.com</code></p> -->
+              </div>
+
+    
+             
+
+                   <ul class="" id="message" style="display:none">
+                     <li></li>
+                     </ul>
+                   
+                      <button type="submit" href="javascript:void(0)" class="btn btn-raised btn-warning" id="savebt"><span>Submit</span></button>
+                      </form>
+
+                    <li>
+                        <a href="/dashboard.html" class="btn btn-raised btn-default"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> 
+                        <span>Back</span></a>
+                        </li>
+
+
+                </ul>
+    
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script src="skin/js/index.js"></script>
+<script src="skin/js/jquery.form-validator.min.js"></script>
+<script src="skin/js/jquery.smartPlaceholder.min.js"></script>
+<!-- Material Design for Bootstrap -->
+<script src="skin/js/material.js"></script>
+<script src="skin/js/ripples.min.js"></script>
+
+<script type="text/javascript" src="skin/js/bootstrap-clockpicker.min.js"></script>
+
+
+
+ <script type="text/javascript">
+ 
+     $.material.init();
+     $(function(){
+      $('.clockpicker').clockpicker({placement: 'bottom',
+    align: 'left',
+    autoclose: true,
+    'default': 'now'});
+       $.ajax({
+                    type: "POST",
+                    url: "http://shine.app/patient/responsibledetail",
+                    data: 'id='+manageCookie.getCookie('dbid'),
+                    crossDomain: true,
+                    cache: false,
+                    dataType:'json',
+                    beforeSend: function() {
+                       
+                    },
+                    success: function(response) {
+                            $('#name').val(response.responsible['name']);
+                            $('#email').val(response.responsible['email']);   
+                            $('#phone').val(response.responsible['phone']);
+                            $('#responsiblePersonId').val(response.responsible['responsiblePersonId']);
+                           
+                        
+                    },
+                   
+
+                });
+       $('#savebt').click(function(event){
+            event.preventDefault();
+            var dob = new Date($('#dob').val());
+            var saveString = {
+                'id':manageCookie.getCookie('dbid'),
+                'name':$('#name').val(),
+                'email':$('#email').val(),
+                'dob': dob.getFullYear()+'-'+(dob.getMonth()+1)+'-'+dob.getDate(),
+                'phone':$('#phone').val(),
+                'address':$('#address').val(),
+                'gender':$('#gender').val(),
+                'responsiblePersonId':$('#responsiblePersonId').val()
+            }
+             $.ajax({
+                    type: "POST",
+                    url: "http://shine.app/patient/updateres",
+                    data: saveString,
+                    crossDomain: true,
+                    cache: false,
+                    dataType:'json',
+                    beforeSend: function() {
+                       
+                    },
+                    success: function(response) {
+
+                            $('#message').show().addClass('success').children('li').html(response.message)
+                           
+
+                        
+                    },
+                    
+
+                });
+       })
+       })
+     //viewajaxAction
+    
+ </script>
+
+</body>
+</html>
