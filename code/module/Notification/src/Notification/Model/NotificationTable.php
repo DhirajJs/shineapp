@@ -110,7 +110,7 @@
 
             $statement = $dbAdapter->createStatement(
                 "INSERT INTO notifications(patientId,doctorId,date,request,approved) values ('{$data['patientId']}',
-'{$user_session['user']->getId()}','{$data['datetime']}','{$data['request']}','Y')"
+'{$user_session['user']->getId()}','{$data['datetime']}','{$data['request']}','{$data['approved']}')"
             );
 
             $driverResult = $statement->execute();
@@ -143,6 +143,33 @@ WHERE notif_id='{$_POST['notif_id']}'");
             $resultSet = new ResultSet();
             $resultSet->initialize($driverResult);
 
+        }
+        public function loadDoctorByPatientId($id)
+        {
+            $dbAdapter = $this->tableGateway->getAdapter();
+            $user_session = new Container('user');
+
+            $select = new Select();
+            $select->from('doctor')
+                ->join(array("p" => "patient"), "doctor.doctorId = p.doctorId")
+                ->where("p.patientId='{$id}'");
+
+            $dbAdapter = $this->tableGateway->getAdapter();
+            $statement = $dbAdapter->createStatement();
+            $select->prepareStatement($dbAdapter, $statement);
+            $driverResult = $statement->execute(); // execute statement to get result
+
+            $resultSet = new ResultSet();
+            $resultSet->initialize($driverResult);
+           // $doctor = array();
+            $row = $resultSet->current(); 
+            $doctor = $row->getArrayCopy();
+            $user = new \User\Model\User();
+            $user->setId($doctor['doctorId']);
+            $user_session['user']= $user;
+
+
+            return $doctor;
         }
 
 

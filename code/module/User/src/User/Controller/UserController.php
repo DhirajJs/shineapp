@@ -9,24 +9,25 @@
  class UserController extends AbstractActionController
  {
      protected $_userTable;
-     public function IndexAction()
+     public function indexAction()
      {
+         $this->layout('layout/login');
          return new ViewModel(array(
              'users' => $this->getUser()->fetchAll(),
          ));
      }
 
-     public function LoginAction()
+     public function loginAction()
      {
 
-        // $this->layout('layout/login');
+         $this->layout('layout/login');
          return array(
              'errorMessages'  => $this->flashmessenger()->getErrorMessages(),
              'successMessage'  => $this->flashmessenger()->getSuccessMessages()
          );
      }
 
-    public  function AccessAction()
+    public  function accessAction()
     {
         $username = $this->getRequest()->getPost('username', null);
         $password  = $this->getRequest()->getPost('password', null);
@@ -101,7 +102,7 @@
         }
     }
 
-     public function IsLoginAction()
+     public function isLoginAction()
      {
 
          $status['login'] = \User\Model\User::isLogin();

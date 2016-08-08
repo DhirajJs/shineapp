@@ -56,6 +56,7 @@
      {
          $this->flashmessenger()->addSuccessMessage('Appointment Saved');
          $data = $this->getRequest()->getPost();
+         $data['approved'] = 'Y';
          $this->getUsersTable()->save($data);
          return $this->redirect()
              ->toRoute('notification',
@@ -63,6 +64,20 @@
                      'action' => 'add',
                  )
              );
+     }
+
+     public function  saveajaxAction()
+     {
+         $this->flashmessenger()->addSuccessMessage('Appointment Saved');
+         $data = $this->getRequest()->getPost();
+         $this->getUsersTable()->loadDoctorByPatientId($data['patientId']);
+         $data['approved'] = 'N';
+         $this->getUsersTable()->save($data);
+         return new JsonModel(array(
+             'message'  => 'Your appointmnent is being reviewed',
+
+         ));
+
      }
 
      public function getUsersTable() {

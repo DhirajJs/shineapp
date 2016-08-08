@@ -15,6 +15,7 @@
     <link href="skin/css/bootstrap-material-design.css" rel="stylesheet">
   <link href="skin/css/ripples.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="skin/css/bootstrap-clockpicker.min.css">
+  <link rel="stylesheet" type="text/css" href="skin/css/DateTimePicker.css" />
 </head>
 <body>
 <div class="form dashboard">
@@ -34,8 +35,8 @@
               </div>
               <div class="form-group label-static is-empty clockpicker">
                 <label for="time" class="control-label">Time</label>
-                <input type="text"  required class="form-control" id="time" name="time" placeholder="Time">
-       
+                <input type="text"  required class="form-control" id="time" name="time" placeholder="Time" data-field="datetime" data-view="Popup" readonly>
+       <div id="dtBox"></div>
 
                 <!-- <p class="help-block">Please enter a valid email address<code>john@gmail.com</code></p> -->
               </div>
@@ -69,7 +70,7 @@
 <script src="skin/js/material.js"></script>
 <script src="skin/js/ripples.min.js"></script>
 
-<script type="text/javascript" src="skin/js/bootstrap-clockpicker.min.js"></script>
+<script type="text/javascript" src="skin/js/DateTimePicker.js"></script>
 
 
 
@@ -77,47 +78,19 @@
  
      $.material.init();
      $(function(){
-      $('.clockpicker').clockpicker({placement: 'bottom',
-    align: 'left',
-    autoclose: true,
-    'default': 'now'});
-       $.ajax({
-                    type: "POST",
-                    url: "http://shine.app/patient/responsibledetail",
-                    data: 'id='+manageCookie.getCookie('dbid'),
-                    crossDomain: true,
-                    cache: false,
-                    dataType:'json',
-                    beforeSend: function() {
-                       
-                    },
-                    success: function(response) {
-                            $('#name').val(response.responsible['name']);
-                            $('#email').val(response.responsible['email']);   
-                            $('#phone').val(response.responsible['phone']);
-                            $('#responsiblePersonId').val(response.responsible['responsiblePersonId']);
-                           
-                        
-                    },
-                   
-
-                });
+     
+   
        $('#savebt').click(function(event){
             event.preventDefault();
-            var dob = new Date($('#dob').val());
+            var time = new Date($('#time').val());
             var saveString = {
-                'id':manageCookie.getCookie('dbid'),
-                'name':$('#name').val(),
-                'email':$('#email').val(),
-                'dob': dob.getFullYear()+'-'+(dob.getMonth()+1)+'-'+dob.getDate(),
-                'phone':$('#phone').val(),
-                'address':$('#address').val(),
-                'gender':$('#gender').val(),
-                'responsiblePersonId':$('#responsiblePersonId').val()
+                'patientId':manageCookie.getCookie('dbid'),
+                'request':$('#request').val(),
+                'datetime':time.getFullYear()+'-'+time.getMonth()+'-'+time.getDate()+ ' '+time.getHours()+':'+time.getMinutes()
             }
              $.ajax({
                     type: "POST",
-                    url: "http://shine.app/patient/updateres",
+                    url: "http://shine.app/notification/saveajax",
                     data: saveString,
                     crossDomain: true,
                     cache: false,
@@ -138,6 +111,11 @@
        })
        })
      //viewajaxAction
+     $(document).ready(function()
+      {
+        $("#dtBox").DateTimePicker();
+      });
+    
     
  </script>
 
