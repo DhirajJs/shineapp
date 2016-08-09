@@ -162,7 +162,7 @@ WHERE notif_id='{$_POST['notif_id']}'");
             $resultSet = new ResultSet();
             $resultSet->initialize($driverResult);
            // $doctor = array();
-            $row = $resultSet->current(); 
+            $row = $resultSet->current();
             $doctor = $row->getArrayCopy();
             $user = new \User\Model\User();
             $user->setId($doctor['doctorId']);

@@ -51,7 +51,7 @@
                       </form>
 
                     <li>
-                        <a href="/dashboard.html" class="btn btn-raised btn-default"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> 
+                        <a href="/reminders.html" class="btn btn-raised btn-default"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> 
                         <span>Back</span></a>
                         </li>
 
@@ -70,6 +70,10 @@
 <script src="skin/js/ripples.min.js"></script>
 
 <script type="text/javascript" src="skin/js/bootstrap-clockpicker.min.js"></script>
+<script src="skin/js/local-notification-util.js"></script>
+<script src="skin/js/local-notification-core.js"></script>
+<script src="skin/js/local-notification.js"></script>
+
 
 
 
@@ -81,62 +85,12 @@
     align: 'left',
     autoclose: true,
     'default': 'now'});
-       $.ajax({
-                    type: "POST",
-                    url: "http://shine.app/patient/responsibledetail",
-                    data: 'id='+manageCookie.getCookie('dbid'),
-                    crossDomain: true,
-                    cache: false,
-                    dataType:'json',
-                    beforeSend: function() {
-                       
-                    },
-                    success: function(response) {
-                            $('#name').val(response.responsible['name']);
-                            $('#email').val(response.responsible['email']);   
-                            $('#phone').val(response.responsible['phone']);
-                            $('#responsiblePersonId').val(response.responsible['responsiblePersonId']);
-                           
-                        
-                    },
-                   
 
-                });
        $('#savebt').click(function(event){
-            event.preventDefault();
-            var dob = new Date($('#dob').val());
-            var saveString = {
-                'id':manageCookie.getCookie('dbid'),
-                'name':$('#name').val(),
-                'email':$('#email').val(),
-                'dob': dob.getFullYear()+'-'+(dob.getMonth()+1)+'-'+dob.getDate(),
-                'phone':$('#phone').val(),
-                'address':$('#address').val(),
-                'gender':$('#gender').val(),
-                'responsiblePersonId':$('#responsiblePersonId').val()
-            }
-             $.ajax({
-                    type: "POST",
-                    url: "http://shine.app/patient/updateres",
-                    data: saveString,
-                    crossDomain: true,
-                    cache: false,
-                    dataType:'json',
-                    beforeSend: function() {
-                       
-                    },
-                    success: function(response) {
-
-                            $('#message').show().addClass('success').children('li').html(response.message)
-                           
-
-                        
-                    },
-                    
-
-                });
+         
+           setNotification($('#reminder').val(),$('#time').val());
        })
-       })
+   })
      //viewajaxAction
     
  </script>

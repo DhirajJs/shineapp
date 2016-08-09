@@ -82,3 +82,22 @@ $(function(){
 		 window.location.href ='/index.html';
 	})
 })
+
+function setNotification(text,time)
+{
+    cordova.plugins.notification.local.schedule({
+    id: 1,
+    title: 'Reminder',
+    text: text,
+    firstAt: new Date(time),
+    every: "day"
+    });
+    var localStorage = manageCookie.getCookie('reminder');
+    if(localStorage){
+          var  arrayStorage = localStorage;
+    }else {
+        var arrayStorage = new Array();
+
+    }
+     arrayStorage.push({'reminder':text,'time':time});
+}
