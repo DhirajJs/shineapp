@@ -24,7 +24,7 @@
         <input type="password" name="password" placeholder="password" data-validation="length" data-validation-length="max100" required />
         <button type="submit" id="login">login</button>
 
-        <a href="dashboard.html" id="link" >dashboard</a>
+        
     </form>
 </div>
 
@@ -46,7 +46,7 @@
 
 
             var dataString = "username=" + $('input[name=username]').val() + "&password=" + $('input[name=password]').val() ;
-       alert(dataString);
+      
                 $.ajax({
                     type: "POST",
                     url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/user/accessajax",
