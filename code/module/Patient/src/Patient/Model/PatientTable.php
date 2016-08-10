@@ -293,4 +293,29 @@
             $resultSet = new ResultSet();
             $resultSet->initialize($driverResult);
         }
+
+        public function saveDetail($data)
+        {
+            $id = $data['id'];
+            $detail = explode(',',$data['data']);
+            $dbAdapter = $this->tableGateway->getAdapter();
+            $user_session = new Container('user');
+            if(sizeof($detail)>6) {
+                $statement = $dbAdapter->createStatement(
+                    "INSERT INTO `bloodpressure` ( `date`, `systolic`, `diastolic`, `patientId`, `heartRate`)
+VALUE('{$detail[2]}-{$detail[1]}-{$detail[0]} {$detail[3]}:{$detail[4]}','{$detail[5]}','{$detail[6]}','{$id}','{$detail[7]}')"
+                );
+            }else {
+                $statement = $dbAdapter->createStatement(
+                    "INSERT INTO `diabetes` ( `date`, `bloodSugarLevel`,  `patientId`)
+VALUE('{$detail[2]}-{$detail[1]}-{$detail[0]} {$detail[3]}:{$detail[4]}','{$detail[5]}','{$id}')"
+                );
+            }
+//30 june 2016 at 14:22 systolic 103 diastolic 66 and pulse 97
+//30,06,2016,14,22,103,66,97
+            $driverResult = $statement->execute();
+            $resultSet = new ResultSet();
+            $resultSet->initialize($driverResult);
+
+        }
     }

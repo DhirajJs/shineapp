@@ -37,7 +37,7 @@
                        </a>
                     </li>
                     <li>
-                        <a href="forms.html" class="btn btn-raised btn-info"> 
+                        <a href="#" class="btn btn-raised btn-info" id="syncData"> 
 
                         <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                         <span>Data Sync</span></a>
@@ -71,12 +71,27 @@
 <script src="skin/js/material.js"></script>
 <script src="skin/js/ripples.min.js"></script>
 <script src="skin/js/checkuser.js"></script>
+<script src="skin/js/bluetooth.js"></script>
 
 
 
  <script type="text/javascript">
  
-     $.material.init();
+         $.material.init();
+          app.initialize();
+            app.ledOn = function(){
+                bluetoothSerial.write("1");
+            }
+            app.ledOff = function(){
+                bluetoothSerial.write("0");
+            }
+            $(function(){
+                $('#syncData').click(function(event){
+                    event.preventDefault();
+                      bluetoothSerial.write("1");
+
+                })
+            })
     
  </script>
 

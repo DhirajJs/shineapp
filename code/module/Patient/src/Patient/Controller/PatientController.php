@@ -179,4 +179,13 @@
                  )
              );
      }
+
+     public function savedetailAction()
+     {
+         $data = $this->getRequest()->getPost();
+         $this->getUsersTable()->saveDetail($data);
+         return new JsonModel (array(
+             'message' => 'success',
+         ));
+     }
  }
