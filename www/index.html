@@ -24,7 +24,7 @@
         <input type="password" name="password" placeholder="password" data-validation="length" data-validation-length="max100" required />
         <button type="submit" id="login">login</button>
 
-        
+        <a href="/dashboard.html" id="link" >dashboard</a>
     </form>
 </div>
 
@@ -43,6 +43,7 @@
 
         $("#login").click(function(event) {
             event.preventDefault();
+
 
             var dataString = "username=" + $('input[name=username]').val() + "&password=" + $('input[name=password]').val() ;
             
@@ -67,10 +68,11 @@
                         //     alert("error");
                         //     
                          }else {
-                            window.location = '/dashboard.html';
+                            //window.location = '/dashboard.html';
                              manageCookie.setCookie('login', true,1);
                              manageCookie.setCookie('user', data.id,1);
                              manageCookie.setCookie('dbid', data.dbId,1);
+                             $('#link').trigger('click');
                          }
                     },
                     complete: function (data) {
