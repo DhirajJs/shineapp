@@ -230,7 +230,7 @@
             $this->setGender((!empty($data['gender'])) ? $data['gender'] : null);
             $this->setTypes((!empty($data['types'])) ? $data['types'] : null);
             $this->setUsername((!empty($data['username'])) ? $data['username'] : null);
-            $this->setDbId((!empty($data['userId'])) ? $data['userId'] : null);
+            $this->setDbId((!empty($data['username'])) ? $data['username'] : null);
         }
 
         public function login($username, $password)

@@ -79,7 +79,7 @@ $(function(){
         manageCookie.removeCookie('login');
         manageCookie.removeCookie('user');
 		manageCookie.removeCookie('dbid');
-		 window.location.href ='/index.html';
+		 window.location.href ='index.html';
 	})
 })
 

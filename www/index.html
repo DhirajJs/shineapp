@@ -24,7 +24,7 @@
         <input type="password" name="password" placeholder="password" data-validation="length" data-validation-length="max100" required />
         <button type="submit" id="login">login</button>
 
-        <a href="/dashboard.html" id="link" >dashboard</a>
+        <a href="dashboard.html" id="link" >dashboard</a>
     </form>
 </div>
 
@@ -46,7 +46,7 @@
 
 
             var dataString = "username=" + $('input[name=username]').val() + "&password=" + $('input[name=password]').val() ;
-            
+       alert(dataString);
                 $.ajax({
                     type: "POST",
                     url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/user/accessajax",
@@ -57,9 +57,10 @@
                     beforeSend: function() {
                         $("#login").val('Connecting...');
                          $('#message').hide();
+
                     },
                     success: function(data) {
-                        console.log(data);
+                            
                          if (data.status == "error") {
                             $('#message').show().addClass('error').children('li').html(data.message)
                             $("#login").val('login');
@@ -72,7 +73,8 @@
                              manageCookie.setCookie('login', true,1);
                              manageCookie.setCookie('user', data.id,1);
                              manageCookie.setCookie('dbid', data.dbId,1);
-                             $('#link').trigger('click');
+                             window.location.href = 'dashboard.html';
+                             
                          }
                     },
                     complete: function (data) {
@@ -81,6 +83,7 @@
                     },
                     error:function(data,status,errorThrown) {
                       // $('#console').html(errorThrown); 
+                       alert(data);
                       
                     }
 
