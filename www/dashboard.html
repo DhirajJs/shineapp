@@ -37,10 +37,11 @@
                        </a>
                     </li>
                     <li>
-                        <a href="#" class="btn btn-raised btn-info" id="syncData"> 
+                        <button class="btn btn-raised btn-info" id="syncData" onclick="bluetoothSerial.write("1");return false"> 
 
                         <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                        <span>Data Sync</span></a>
+                        <span>Data Sync</span></button>
+                        <div id="messageDiv" style="font-size:75%"></div>
                     </li>
                     <li>
                         <a href="patientinfo.html" class="btn btn-raised btn-default"><i class="fa fa-wrench fa-fw"></i> 
@@ -78,19 +79,13 @@
  <script type="text/javascript">
          $.material.init();
           app.initialize();
-            app.ledOn = function(){
+            app.ledOn = function(){ alert(1);
                 bluetoothSerial.write("1");
             }
             app.ledOff = function(){
                 bluetoothSerial.write("0");
             }
-            $(function(){
-                $('#syncData').click(function(event){
-                    event.preventDefault();
-                      bluetoothSerial.write("1");
-
-                })
-            })
+           
     
  </script>
 

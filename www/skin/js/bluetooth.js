@@ -32,19 +32,20 @@ var app = {
     connect: function (e) {
         app.setStatus("Connecting...");
         //var device = e.target.getAttribute('deviceId');
-		var device = "98:D3:31:80:6E:20";
+        var device = "98:D3:31:80:6E:20";
         console.log("Requesting connection to " + device);
         bluetoothSerial.connect(device, app.onconnect, app.ondisconnect);  
         bluetoothSerial.subscribe('\n', app.onData, app.onError);
       
     },
     onData: function(data) { // data received from Arduino
-	//here get data from arduino
-        console.log(data);
+    //here get data from arduino
+      
         app.setStatus(data);// nek sa ki p show i know y dame me
-		if(data){
-			       // document.getElementById('messageInput').innerHTML = document.getElementById('messageInput').innerHTML + "Received: " + data + "<br/>";
-		       $.ajax({
+        if(data){ 
+            
+                   // document.getElementById('messageInput').innerHTML = document.getElementById('messageInput').innerHTML + "Received: " + data + "<br/>";
+               $.ajax({
                     type: "POST",
                     url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/patient/savedetail",
                     data: 'id='+manageCookie.getCookie('dbid')+'&data='+data,
@@ -55,14 +56,14 @@ var app = {
                        
                     },
                     success: function(response) {
-                           console.log(response);
+                          
 
                         
                     },
                    
 
                 });
-		}
+        }
 
     },
     disconnect: function(event) {
