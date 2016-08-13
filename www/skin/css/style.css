@@ -72,7 +72,6 @@
   background: #c4e6cd;
   width: 100%;
   border: 0;
-  padding: 15px;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   border-bottom-left-radius: 3px;
@@ -216,7 +215,6 @@ h1 {
   min-height: 300px;
 }
 input[type="date"]:before {
-   content: attr(placeholder) !important;
    color: #aaa;
    margin-right: 0.5em;
  }
@@ -507,7 +505,8 @@ margin: 20px auto;
 }
 .dt-title {
   width: 100%;
-  font-size: 2.5em;
+  font-size: 1.5em;
+  margin-bottom: 0em;
 }
 #side-menu {
      -ms-box-orient: horizontal;
@@ -521,7 +520,7 @@ margin: 20px auto;
   flex-flow: wrap row;
   justify-content:center;
   align-items:center;
-  margin-top: 50px;
+  margin-top: 20px;
     
 }
 #side-menu.setting-nav li{
@@ -536,6 +535,7 @@ margin: 20px auto;
 }
 #side-menu li span{ 
   display: block;
+  font-size: 0.8em;
 }
 #side-menu li .fa{ 
   display: inline-block;
@@ -552,3 +552,40 @@ margin: 20px auto;
   box-shadow: none;
   border: none;
 }
+#chart_div_bp{
+  margin-top: 20px;
+}
+.btn.btn-raised.btn-default {
+  padding-bottom: 12px !important;
+}
+#side-menu  .btn.btn-raised.btn-default{
+padding-bottom: 24px !important;
+}
+.form button.btn-raised {
+  padding: 22px 10px;
+  font-size: 0.9em;
+
+}
+.view-reading .db-r,.view-reading .bp-r {
+  display: none!important;
+}
+.view-reading.bloodpressure-reading .bp-r {
+  display: block!important;
+}
+.view-reading.diabetes-reading .db-r {
+  display: block!important;
+}
+.view-reading .db-r label,.view-reading .bp-r label {
+  font-size: 18px !important;
+}
+.header span { margin-top: 4px;}
+.view-reading  .btn-warning { margin-top: 20px;}
+.togglebutton { text-align: left;}
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  input[type="date"].form-control,
+  input[type="time"].form-control,
+  input[type="datetime-local"].form-control,
+  input[type="month"].form-control {
+    line-height: 34px;
+  }
+  }

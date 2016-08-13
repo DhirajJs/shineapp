@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="skin/css/font-awesome.min.css">
     <link href="skin/css/bootstrap-material-design.css" rel="stylesheet">
   <link href="skin/css/ripples.min.css" rel="stylesheet">
+   <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
 </head>
 <body>
 <div class="form dashboard">
@@ -37,11 +38,12 @@
                        </a>
                     </li>
                     <li>
-                        <button class="btn btn-raised btn-info" id="syncData" onclick="bluetoothSerial.write("1");return false"> 
+                        <button class="btn btn-raised btn-info" id="syncData" disabled onclick="app.ledOn()"> 
 
                         <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                        <span>Data Sync</span></button>
-                        <div id="messageDiv" style="font-size:75%"></div>
+                        <span>Connecting </span></button>
+                        <div id="messageInput" name="messageInput" style="font-size:75%;color:red"></div>
+                        
                     </li>
                     <li>
                         <a href="patientinfo.html" class="btn btn-raised btn-default"><i class="fa fa-wrench fa-fw"></i> 
@@ -60,11 +62,39 @@
 
 
                 </ul>
+                <div id="connectionScreen" style="display:none">
+            <ul id="deviceList" class="topcoat-list">      
+            </ul>
+            <div style="margin: 10px">            
+                <button class="topcoat-button" id="refreshButton">Sync via bluetooth</button>
+            </div>  
+                
+                 
+    </div>
+        
+        <div id="colorScreen">
+            
+            <button class="green wide" onclick="app.ledOn()">Sync</button>
+
+
+            <button class="red wide" onclick="app.ledOff()">Exit</button>
+
+            
+            <button class="yellow wide" id="disconnectButton" onclick="app.disconnect()">Disconnect</button>
+       
+            
+        </div>
+       <div id="messageDiv" style="font-size:75%"></div>        
+       
+   
+        </div>
     
 </div>
 
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
+        <script type="text/javascript" src="cordova.js"></script>
 <script src="skin/js/index.js"></script>
 <script src="skin/js/jquery.form-validator.min.js"></script>
 <script src="skin/js/jquery.smartPlaceholder.min.js"></script>
@@ -72,22 +102,44 @@
 <script src="skin/js/material.js"></script>
 <script src="skin/js/ripples.min.js"></script>
 <script src="skin/js/checkuser.js"></script>
+<script src="skin/js/underscore-min.js"></script>
 <script src="skin/js/bluetooth.js"></script>
 
 
 
  <script type="text/javascript">
          $.material.init();
-          app.initialize();
-            app.ledOn = function(){ alert(1);
+         
+         // app.initialize(); 
+            // app.ledOn = function(){ 
+            //    // alert(1);
+            //   //  bluetoothSerial.write("1");
+            // }
+            // app.ledOff = function(){
+            //     //bluetoothSerial.write("0");
+            // }
+        
+           
+    
+ </script>
+     <script type="text/javascript">
+            app.initialize();
+            app.ledOn = function(){
                 bluetoothSerial.write("1");
             }
             app.ledOff = function(){
                 bluetoothSerial.write("0");
             }
-           
-    
- </script>
 
+            // $(function(){
+            //     $('#syncData').click(function(){
+            //         $('#deviceList li').trigger('click');
+            //         $('#refreshButton').delay(100).trigger('click');
+            //        // $('#colorScreen .green').delay(100).trigger('click');
+            //        // alert(1);
+
+            //     })
+            // })
+        </script>
 </body>
 </html>

@@ -72,7 +72,7 @@
 
                         <?php endif; ?>
                 </div>
-                <?php if($this->patientDetails['medication']): ?>
+
                 <div class="medication">
 
                     <div class="">
@@ -93,6 +93,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        <?php if($this->patientDetails['medication']): ?>
                                         <?php foreach ($this->patientDetails['medication'] as $medication): ?>
                                             <tr>
                                                 <td><?php echo $medication['bmi']; ?></td>
@@ -101,7 +102,11 @@
                                                 <td><?php echo $medication['consultation_details']; ?></td>
                                             </tr>
                                         <?php endforeach; ?>
-
+                                            <?php else: ?>
+                                        <tr>
+                                            <td colspan="4">No Consultation  </td>
+                                            </tr>
+                                        <?php endif;?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -113,7 +118,7 @@
             </div><!--col-1-->
 
         </div><!--end of patient-container-->
-                <?php endif;?>
+
     </div><!-- end of dashboard-->
             <div class="col-2">
                 <div class="diabetes-model" data-remodal-id="diabetes">
@@ -139,20 +144,20 @@
                 <div class="modal-body">
                     <div class="dashboard form">
                         <p class="field">Name</p>
-                        <input type="text" name="name" placeholder="name" data-validation="length" data-validation-length="min4" value="<?php echo $this->patientDetails['details']['name'] ?>"/>
+                        <input type="text" name="name" placeholder="name" required data-validation="length" data-validation-length="min4" value="<?php echo $this->patientDetails['details']['name'] ?>"/>
                         <p class="field">Email</p>
-                        <input type="email" name="email" placeholder="email address" data-validation="email" value="<?php echo $this->patientDetails['details']['email'] ?>"/>
+                        <input type="email" name="email" placeholder="email address" required data-validation="email" value="<?php echo $this->patientDetails['details']['email'] ?>"/>
                         <p class="field">Date of birth</p>
-                        <input type="date" name="dob"  value="<?php echo $this->patientDetails['details']['dob'] ?>"/>
+                        <input type="date" name="dob"  value="<?php echo $this->patientDetails['details']['dob'] ?>" required/>
                         <p class="field">Gender</p>
                         <select name="gender">
                             <option value="M" <?php if($this->patientDetails['details']['gender'] == 'M'){ echo ' selected="selected"'; } ?>>Male</option>
                             <option value="F" <?php if($this->patientDetails['details']['gender'] == 'F'){ echo ' selected="selected"'; } ?>>Female</option>
                         </select>
                         <p class="field">Telephone</p>
-                        <input type="text" name="phone" placeholder="phone" data-validation="length" data-validation-length="min7" value="<?php echo $this->patientDetails['details']['phone'] ?>"/>
+                        <input type="text" name="phone" placeholder="phone" required data-validation="length" data-validation-length="min7" value="<?php echo $this->patientDetails['details']['phone'] ?>"/>
                         <p class="field">Address</p>
-                        <input type="text" name="address" placeholder="address" value="<?php echo $this->patientDetails['details']['address'] ?>"/>
+                        <input type="text" name="address" placeholder="address" required value="<?php echo $this->patientDetails['details']['address'] ?>"/>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -181,15 +186,20 @@
 
     function drawBasicDiabeted() {
         var data = new google.visualization.DataTable();
-        data.addColumn('number', 'X');
+        data.addColumn('date', 'X');
         data.addColumn('number', 'Diabetes progess');
+        data.addColumn({type:'string', role:'tooltip'});
         var diabetesAr = new Array();
         <?php
         $array = array();
         foreach ($this->patientDetails['diabetes'] as $diabetes) {
 
-            $time =  @date('d', @strtotime($diabetes['date']));
-            $array[] = "[{$time},{$diabetes['bloodSugarLevel']}]";
+            $toolTip= 'On '. @date('d M Y H:i' , @strtotime($diabetes['date'])).
+                " "."Diabetes progess: {$diabetes['bloodSugarLevel']}"." ".
+                ($diabetes['fasting']?' and was taken Fasting':'');
+            ;
+            $time =  @date('d', @strtotime($diabetes['date']));//+'".($diabetes['fasting']?'Fasting:Yes':'Fasting:No'). "'
+            $array[] = "[new Date('{$diabetes['date']}'),{$diabetes['bloodSugarLevel']},'{$toolTip}' ]";
         }
         $addRow = implode(',',$array);
         ?>
@@ -218,7 +228,7 @@
 
     function drawBasicBloodPressure() {
         var data = new google.visualization.DataTable();
-        data.addColumn('number', 'Day');
+        data.addColumn('date', 'Day');
         data.addColumn('number', 'Systolic');
         data.addColumn('number', 'Diastolic');
         //systolic`, `diastolic`, `patientId`, `heartRate`
@@ -227,7 +237,7 @@
         $array = array();
         foreach ($this->patientDetails['bloodPresure'] as $bloodPresure) {
             $time =  @date('d', @strtotime($bloodPresure['date']));
-            $array[] = "[{$time},{$bloodPresure['systolic']},{$bloodPresure['diastolic']}]";
+            $array[] = "[new Date('{$bloodPresure['date']}'),{$bloodPresure['systolic']},{$bloodPresure['diastolic']}]";
         }
         $addRow = implode(',',$array);
         ?>

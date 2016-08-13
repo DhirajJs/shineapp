@@ -20,6 +20,7 @@
         ->prependStylesheet($this->basePath() . '/css/style-980.css')
         ->prependStylesheet($this->basePath() . '/css/style.css')
 
+        ->prependStylesheet($this->basePath() . '/css/DateTimePicker.css')
         ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
         ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
         ->prependStylesheet($this->basePath() . '/css/bootstrap/metisMenu/dist/metisMenu.min.css')
@@ -36,6 +37,7 @@
 
     <!-- Scripts -->
     <?php echo $this->headScript()
+        ->prependFile($this->basePath() . '/js/DateTimePicker.js')
         ->prependFile($this->basePath() . '/js/bootstrap.min.js')
         ->prependFile($this->basePath() . '/js/index.js')
         ->prependFile($this->basePath() . '/js/jquery.smartPlaceholder.min.js')

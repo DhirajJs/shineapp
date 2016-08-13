@@ -8,15 +8,18 @@ var app = {
     },
     bind: function() {
         document.addEventListener('deviceready', this.deviceready, false);
-        colorScreen.hidden = true;
+       // colorScreen.hidden = true;
     },
     deviceready: function() {
 
         // wire buttons to functions
-        deviceList.ontouchstart = app.connect; // assume not scrolling
-        refreshButton.ontouchstart = app.list;
-        disconnectButton.ontouchstart = app.disconnect;
-
+        //deviceList.ontouchstart = app.connect; // assume not scrolling
+        //refreshButton.ontouchstart = app.list;
+        //disconnectButton.ontouchstart = app.disconnect;
+        
+       // app.list();
+        app.connect();
+       
         // throttle changes
         var throttledOnColorChange = _.throttle(app.onColorChange, 200);
         $('input').on('change', throttledOnColorChange);
@@ -31,40 +34,23 @@ var app = {
     },
     connect: function (e) {
         app.setStatus("Connecting...");
-        //var device = e.target.getAttribute('deviceId');
-        var device = "98:D3:31:80:6E:20";
+        var device = '98:D3:31:80:6E:20';//e.target.getAttribute('deviceId');
         console.log("Requesting connection to " + device);
         bluetoothSerial.connect(device, app.onconnect, app.ondisconnect);  
         bluetoothSerial.subscribe('\n', app.onData, app.onError);
       
     },
     onData: function(data) { // data received from Arduino
-    //here get data from arduino
-      
-        app.setStatus(data);// nek sa ki p show i know y dame me
-        if(data){ 
+        //console.log(data);
+        app.setStatus(data);
+         if(data && data!=1){ 
             
+            manageCookie.setCookie('reading',data);
+            window.location.href="healthview.html";
                    // document.getElementById('messageInput').innerHTML = document.getElementById('messageInput').innerHTML + "Received: " + data + "<br/>";
-               $.ajax({
-                    type: "POST",
-                    url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/patient/savedetail",
-                    data: 'id='+manageCookie.getCookie('dbid')+'&data='+data,
-                    crossDomain: true,
-                    cache: false,
-                    dataType:'json',
-                    beforeSend: function() {
-                       
-                    },
-                    success: function(response) {
-                          
-
-                        
-                    },
-                   
-
-                });
+  
         }
-
+        //messageInput.innerHTML = messageInput.innerHTML + "Received: " + data + "<br/>";
     },
     disconnect: function(event) {
         if (event) {
@@ -75,9 +61,12 @@ var app = {
         bluetoothSerial.disconnect(app.ondisconnect);
     },
     onconnect: function() {
-        connectionScreen.hidden = true;
-        colorScreen.hidden = false;
+        //connectionScreen.hidden = true;
+        //colorScreen.hidden = false;
         app.setStatus("Connected.");
+
+        $('#syncData span').html('Data Sync').parent().removeAttr('disabled');
+        //bluetoothSerial.write("1");
     },
     ondisconnect: function() {
         connectionScreen.hidden = false;
@@ -141,6 +130,15 @@ var app = {
         } else {
             app.setStatus("Found " + devices.length + " device" + (devices.length === 1 ? "." : "s."));
         }
+        // if(data){ 
+            
+        //     manageCookie.setCookie('reading',data);
+        //     window.location.href="healthview.html";
+        //            // document.getElementById('messageInput').innerHTML = document.getElementById('messageInput').innerHTML + "Received: " + data + "<br/>";
+  
+        // }else {
+        //     alert('No data to sync');
+        // }
     },
     generateFailureFunction: function(message) {
         var func = function(reason) {

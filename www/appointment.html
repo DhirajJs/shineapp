@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="skin/css/font-awesome.min.css">
     <link href="skin/css/bootstrap-material-design.css" rel="stylesheet">
   <link href="skin/css/ripples.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="skin/css/bootstrap-clockpicker.min.css">
-  <link rel="stylesheet" type="text/css" href="skin/css/DateTimePicker.css" />
+   <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+
 </head>
 <body>
 <div class="form dashboard">
@@ -35,7 +35,7 @@
               </div>
               <div class="form-group label-static is-empty clockpicker">
                 <label for="time" class="control-label">Time</label>
-                <input type="text"  required class="form-control" id="time" name="time" placeholder="Time" data-field="datetime" data-view="Popup" readonly>
+                <input type="datetime-local"  required class="form-control" id="time" name="time" placeholder="Time" data-field="datetime" data-view="Popup" readonly>
        <div id="dtBox"></div>
 
                 <!-- <p class="help-block">Please enter a valid email address<code>john@gmail.com</code></p> -->
@@ -69,9 +69,6 @@
 <!-- Material Design for Bootstrap -->
 <script src="skin/js/material.js"></script>
 <script src="skin/js/ripples.min.js"></script>
-
-<script type="text/javascript" src="skin/js/DateTimePicker.js"></script>
-
 
 
  <script type="text/javascript">
@@ -111,10 +108,7 @@
        })
        })
      //viewajaxAction
-     $(document).ready(function()
-      {
-        $("#dtBox").DateTimePicker();
-      });
+    
     
     
  </script>

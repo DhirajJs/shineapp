@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Login Form</title>
+    <link rel="stylesheet" href="skin/css/reset.css">
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900'>
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Montserrat:400,700'>
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic'
+      rel='stylesheet' type='text/css'>
+      <link href="skin/bootstrap/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="skin/css/style.css">
+      <link rel="stylesheet" href="skin/css/font-awesome.min.css">
+      <link href="skin/css/bootstrap-material-design.css" rel="stylesheet">
+      <link href="skin/css/ripples.min.css" rel="stylesheet">
+       <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    </head>
+    <body>
+      <div class="form dashboard view-reading">
+        <div class="dt-title"><i class="fa fa-user-md" aria-hidden="true"></i> Patient Info</div>
+        
+        <ul class="nav setting-nav " id="side-menu">
+          <li>
+            <div class="well page active" id="fileinput" style="display: block;">
+              <h1 class="header">View Reading For
+              <span class="bp-r"> Blood Pressure</span>
+              <span class="db-r"> Diabetes</span>
+              </h1>
+              <form method="post" action="">
+                <div class="form-group label-static is-empty db-r">
+                  <label for="name" class="control-label " id="bs">
+                    Blood Sugar Level
+                    <strong></strong>
+                  </label>
+                  
+                </div>
+                 <div class="togglebutton form-group label-static is-empty db-r">
+                  <label>
+                    Reading taken while fasting
+                    <input type="checkbox" name="fasting" id ="fasting" value="1">
+                  </label>
+                </div>
+                <div class="form-group label-static is-empty bp-r">
+                  <label for="name" class="control-label " id="sy">
+                    Systolic
+                    <strong></strong>
+                  </label>
+                  
+                </div>
+                <div class="form-group label-static is-empty bp-r">
+                  <label for="name" class="control-label " id="di">
+                    Diastolic
+                    <strong></strong>
+                  </label>
+                  
+                </div>
+                <div class="form-group label-static is-empty bp-r">
+                  <label for="name" class="control-label " id="hr">
+                    HeartRate
+                    <strong></strong>
+                  </label>
+                  
+                </div>
+
+              
+              
+              <ul class="" id="message" style="display:none">
+                <li></li>
+              </ul>
+              <button type="submit" href="javascript:void(0)" class="btn btn-raised btn-warning" id="savebt">
+              <span>Submit</span></button>
+            </form>
+            
+            
+          </div>
+        </li>
+        <li>
+          <a href="dashboard.html" class="btn btn-raised btn-default"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+            <span>Back</span></a>
+          </li>
+        </ul>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="skin/js/index.js"></script>
+        <script src="skin/js/jquery.form-validator.min.js"></script>
+        <script src="skin/js/jquery.smartPlaceholder.min.js"></script>
+        <!-- Material Design for Bootstrap -->
+        <script src="skin/js/material.js"></script>
+        <script src="skin/js/ripples.min.js"></script>
+        <script type="text/javascript">
+         $.material.init();
+        //30,06,2016,14,22,103,66,97
+        manageCookie.setCookie('reading','0,06,2016,14,22,103');
+          if(!manageCookie.getCookie('reading')) {
+            alert('No reading to sync');
+             window.location.href= 'dashboard.html';
+          }
+
+          $(function(){
+
+          var dataReading = manageCookie.getCookie('reading').split(',');
+          
+          if(dataReading.length>6) {
+            $('.view-reading').addClass('bloodpressure-reading');
+            $('#sy strong').html(dataReading[5]);
+            $('#di strong').html(dataReading[6]);
+            $('#hr strong').html(dataReading[7]);
+          }else {
+            $('.view-reading').addClass('diabetes-reading');
+            $('#bs strong').html(dataReading[4]);
+          }
+            $('#savebt').click(function(event){
+                event.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/patient/savedetail",
+                    data: 'id='+manageCookie.getCookie('dbid')+'&data='+manageCookie.getCookie('reading')+'&fasting='+jQuery('#fasting:checked').length,
+                    crossDomain: true,
+                    cache: false,
+                    dataType:'json',
+                    beforeSend: function() {
+                    
+                    },
+                    success: function(response) {
+                    manageCookie.removeCookie('reading');
+                    alert('Your data has been sync');
+                   //  window.location.href= 'dashboard.html';
+                    
+                    },
+                
+                });
+            })
+          })
+        </script>
+      </body>
+    </html>

@@ -307,8 +307,8 @@ VALUE('{$detail[2]}-{$detail[1]}-{$detail[0]} {$detail[3]}:{$detail[4]}','{$deta
                 );
             }else {
                 $statement = $dbAdapter->createStatement(
-                    "INSERT INTO `diabetes` ( `date`, `bloodSugarLevel`,  `patientId`)
-VALUE('{$detail[2]}-{$detail[1]}-{$detail[0]} {$detail[3]}:{$detail[4]}','{$detail[5]}','{$id}')"
+                    "INSERT INTO `diabetes` ( `date`, `bloodSugarLevel`,  `patientId`,`fasting`)
+VALUE('{$detail[2]}-{$detail[1]}-{$detail[0]} {$detail[3]}:{$detail[4]}','{$detail[5]}','{$id}', {$data['fasting']})"
                 );
             }
 //30 june 2016 at 14:22 systolic 103 diastolic 66 and pulse 97

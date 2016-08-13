@@ -24,8 +24,8 @@
                 right: 'month,basicWeek,basicDay'
             },
             defaultDate: '<?php echo @date("Y-m-d",@strtotime("now")); ?>',
-            editable: true,
-            businessHours: true, // display business hours
+            editable: false,
+            businessHours: false, // display business hours
 
             eventLimit: true, // allow "more" link when too many events
             events: [
@@ -34,7 +34,8 @@
                     title: "<?php echo $row['name']; ?>|<?php echo $row['phone']; ?>",
                     start: "<?php echo @date('Y-m-d',@strtotime($row['date']));?>T<?php echo @date('H:i',@strtotime($row['date'])); ?>",
                     end: '<?php echo @date('Y-m-d',@strtotime($row['date']));?>T<?php echo @date('H:i',@strtotime($row['date'])+3600);?>',
-                    color: '#257e4a'
+                    color: '#257e4a',
+
                 },
                 <?php endforeach; ?>
             ]

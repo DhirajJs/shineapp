@@ -15,6 +15,7 @@
     <link href="skin/css/bootstrap-material-design.css" rel="stylesheet">
   <link href="skin/css/ripples.min.css" rel="stylesheet">
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
 </head>
 <body>
 <div class="form dashboard">
@@ -75,15 +76,18 @@
 
     function drawBasicDiabeted() {
         var data = new google.visualization.DataTable();
-        data.addColumn('number', 'X');
+        data.addColumn('date', 'X');
         data.addColumn('number', 'Diabetes progess');
+
+        data.addColumn({type:'string', role:'tooltip'});
         var diabetesAr = new Array();
     
          var $array = new Array();
         for(index in response.patientDetails.diabetes){
-            $time =  new Date(response.patientDetails.diabetes[index].date).getDate();
-            bloodSugarLevel = parseFloat(response.patientDetails.diabetes[index].bloodSugarLevel);
-            $array.push([$time,bloodSugarLevel]);// "[{$time},{$diabetes['bloodSugarLevel']}]";
+            var $time =  new Date(response.patientDetails.diabetes[index].date)
+            bloodSugarLevel = parseFloat(response.patientDetails.diabetes[index].bloodSugarLevel),
+             $toolTip= 'On '+$time.toString().replace(/GMT * /,''),+" "+"Diabetes progess: "+bloodSugarLevel+" "+(response.patientDetails.diabetes[index].fasting?' and was taken Fasting':'');
+            $array.push([$time,bloodSugarLevel,$toolTip]);// "[{$time},{$diabetes['bloodSugarLevel']}]";
         }
         
        
@@ -97,14 +101,17 @@
             },
             
             chartArea: {
-                width: "50%",
-                height: "100%"
+                width: "70%",
+                height: "70%"
             },
+            legend: { position: 'top' },
             x: {
                 0: {
                     side: 'top'
                 }
-            }
+            },
+
+
         };
         var chart = new google.visualization.LineChart(document.getElementById('chart_div_diabetes'));
         chart.draw(data, options);
@@ -112,7 +119,7 @@
 
     function drawBasicBloodPressure() {
         var data = new google.visualization.DataTable();
-        data.addColumn('number', 'Day');
+        data.addColumn('date', 'Day');
         data.addColumn('number', 'Systolic');
         data.addColumn('number', 'Diastolic');
         //systolic`, `diastolic`, `patientId`, `heartRate`
@@ -121,7 +128,7 @@
 
         for(index in response.patientDetails.bloodPresure){
 
-            var $time =  new Date(response.patientDetails.bloodPresure[index].date).getDate();
+            var $time =  new Date(response.patientDetails.bloodPresure[index].date);
             var systolic =parseFloat(response.patientDetails.bloodPresure[index].systolic);
             var diastolic =parseFloat(response.patientDetails.bloodPresure[index].diastolic);
             $array.push([$time,systolic,diastolic]);// "[{$time},{$diabetes['bloodSugarLevel']}]";
@@ -137,9 +144,10 @@
             },
            
             chartArea: {
-                width: "50%",
-                height: "100%"
+                width: "70%",
+                height: "70%"
             },
+            legend: { position: 'top' },
             x: {
                 0: {
                     side: 'top'

@@ -16,14 +16,15 @@
 
         <form method="POST" action="/patient/doctorsave" class="login-form">
             <p class="field">Name</p>
-            <input type="text" name="name" value="<?php echo $this->doctor['name'] ?>"placeholder="name" data-validation="length" data-validation-length="min4"/>
+            <input type="text" name="name" value="<?php echo $this->doctor['name'] ?>"placeholder="name"
+                   data-validation="length" data-validation-length="min4" required/>
 
             <p class="field">Phone</p>
-            <input type="phone" name="phone" value="<?php echo $this->doctor['phone'] ?>" ?>
+            <input type="phone" name="phone" value="<?php echo $this->doctor['phone'] ?>"  required?>
             <p class="field">Email</p>
-            <input type="email" name="email" value="<?php echo $this->doctor['email'] ?>" ?>
+            <input type="email" name="email" value="<?php echo $this->doctor['email'] ?>" required ?>
             <p class="field">Address</p>
-            <input type="text" name="address" value="<?php echo $this->doctor['address'] ?>" ?>
+            <input type="text" name="address" value="<?php echo $this->doctor['address'] ?>" required?>
             <button type="submit" name="update" value="update">Update</button>
 
 
