@@ -15,13 +15,13 @@
             <?php if($this->patients): ?>
 
             <?php foreach($this->patients as $patient) :  ?>
-                <form method="post" action="/patient/view" id="form-<?php echo $patient->getId(); ?>">
+                <form method="post" action="/patient/view" id="form-<?php echo $patient['patientId'];?>">
 
                     <button type="submit" name="action" value="" class="button-link name-patient">
-                        <span class="patient-id"><?php echo $patient->getId();?></span>
-                        <span><?php echo $patient->getName();?></span>
+                        <span class="patient-id"><?php echo $patient['patientId'];?></span>
+                        <span><?php echo $patient['name'];?></span>
                     </button>
-                    <input type="hidden" name="id" value="<?php echo $patient->getId(); ?>"/>
+                    <input type="hidden" name="id" value="<?php echo $patient['patientId'];?>"/>
                 </form>
 
             <?php endforeach; ?>

@@ -41,6 +41,7 @@
             ->toRoute('user',
                 array(
                     'action' => 'login',
+
                 )
             );
         }
@@ -53,6 +54,35 @@
             );
 
     }
+
+     public  function createuserAction()
+     {
+         $data = $this->getRequest()->getPost();
+
+         $return = $this->getUsersTable()->createDoctor($data);
+
+         if($return['status'] =='error') {
+             $this->flashmessenger()->addErrorMessage($return['message']);
+             $this->layout('layout/login');
+             return new ViewModel(array(
+                 'data' => $data,
+                 'errorMessages'  => $this->flashmessenger()->getErrorMessages(),
+                 'successMessage'  => $this->flashmessenger()->getSuccessMessages()
+             ));
+
+         }
+         //var_dump($return);die();
+         $this->flashmessenger()->addSuccessMessage($return['message']);
+         return $this->redirect()
+             ->toRoute('user',
+                 array(
+                     'action' => 'login',
+
+                     'successMessage'  => $this->flashmessenger()->getSuccessMessages()
+                 )
+             );
+
+     }
 
      public  function accessajaxAction()
      {

@@ -18,8 +18,26 @@
 
         public function fetchAll()
         {
+            $user_session = new Container('user');
+            $docId = $user_session['user']->getId();
             $resultSet = $this->tableGateway->select();
-            return $resultSet;
+            $select = new \Zend\Db\Sql\Select ;
+            $select->from('patient');
+            $select->where(" doctorId = '{$docId}'");
+            $dbAdapter = $this->tableGateway->getAdapter();
+            $statement = $dbAdapter->createStatement();
+            $select->prepareStatement($dbAdapter, $statement);
+            $driverResult = $statement->execute(); // execute statement to get result
+
+            $resultSet = new ResultSet();
+            $resultSet->initialize($driverResult);
+            $patient = array();
+            foreach ($resultSet as $row) {
+
+                $storage = $row->getArrayCopy();
+                $patient[] = $storage;
+            }
+            return $patient;
         }
 
         public  function  search($search)
@@ -214,47 +232,80 @@
             $resultSet->initialize($driverResult);
         }
 
+        public function checkUser($username)
+        {
+            $select = new \Zend\Db\Sql\Select ;
+            $select->from('users');
+            $select->where(" username = '{$username}'");
+
+
+            $dbAdapter = $this->tableGateway->getAdapter();
+            $statement = $dbAdapter->createStatement();
+            $select->prepareStatement($dbAdapter, $statement);
+            $driverResult = $statement->execute(); // execute statement to get result
+
+            $resultSet = new ResultSet();
+            $resultSet->initialize($driverResult);
+            $rowUser = $resultSet->current();
+
+            if($rowUser) {
+                return true;
+            }else {
+                return false;
+            }
+
+        }
+
         public  function save($data)
         {
             $user_session = new Container('user');
 
             $username = $data["username"];
             $password = $data["password"];
-            $userId = $data["userId"];
+            $toReturn['message'] = '';
+            $toReturn['status'] = 'error';
+            if($this->checkUser($data['username'])) {
+                $toReturn['message'] = 'Username already exist';
+                $toReturn['status'] = 'error';
+            }else {
 
-            $name = $data["name"];
-            $email = $data["email"];
-            $phone = $data["phone"];
-            $address = $data["address"];
-            $dob = $data["dob"];
-            $gender = $data["gender"];
-            $docId = $user_session['user']->getId();
 
-            $password = md5($password);
+                $name = $data["name"];
+                $email = $data["email"];
+                $phone = $data["phone"];
+                $address = $data["address"];
+                $dob = $data["dob"];
+                $gender = $data["gender"];
+                $docId = $user_session['user']->getId();
+
+                $password = md5($password);
 // $sql = "INSERT INTO users (username, password,userId,types) VALUES ('".$username."','". $password."','".$userId."','".$types."')";
 //            $sql1= "INSERT INTO patient (doctorId,name,email,phone,address,dob,patientId) VALUES ('".$docId."','". $name."','".$email."','".$phone."','".$address."','".$dob."','".$userId."')";
 
-            $dbAdapter = $this->tableGateway->getAdapter();
-            $user_session = new Container('user');
-            $statement = $dbAdapter->createStatement(
-                "INSERT INTO users (username, password,userId,types)
- VALUES ('{$username}','{$password}','{$userId}','P')"
-            );
+                $dbAdapter = $this->tableGateway->getAdapter();
+                $user_session = new Container('user');
+                $statement = $dbAdapter->createStatement(
+                    "INSERT INTO users (username, password,types)
+ VALUES ('{$username}','{$password}','P')"
+                );
 
-            $driverResult = $statement->execute();
-            $resultSet = new ResultSet();
-            $resultSet->initialize($driverResult);
+                $driverResult = $statement->execute();
+                $resultSet = new ResultSet();
+                $resultSet->initialize($driverResult);
 
 
-            $statement = $dbAdapter->createStatement("INSERT INTO patient (`doctorId`,`name`,`email`,`phone`,`address`,`dob`,`patientId`,`gender`)
-            VALUES ('{$docId}','{$name}','{$email}','{$phone}','{$address}','{$dob}','{$userId}','{$gender}')"
-            );
+                $statement = $dbAdapter->createStatement("INSERT INTO patient (`doctorId`,`name`,`email`,`phone`,`address`,`dob`,`patientId`,`gender`)
+            VALUES ('{$docId}','{$name}','{$email}','{$phone}','{$address}','{$dob}','{$username}','{$gender}')"
+                );
 
-            $driverResult = $statement->execute();
-            $resultSet = new ResultSet();
+                $driverResult = $statement->execute();
+                $resultSet = new ResultSet();
 
-            $resultSet->initialize($driverResult);
-            ;
+                $resultSet->initialize($driverResult);
+                $toReturn['message'] = 'Your patient has been created';
+                $toReturn['status'] = 'sucess';
+            }
+            return $toReturn;
         }
 
         public function getDoctor()

@@ -220,7 +220,7 @@
 
         public function exchangeArray($data)
         {
-            $this->setId((!empty($data['userId'])) ? $data['userId'] : null);
+            $this->setId((!empty($data['username'])) ? $data['username'] : null);
             $this->setName((!empty($data['name'])) ? $data['name'] : null);
             $this->setEmail((!empty($data['email'])) ? $data['email'] : null);
             $this->setDoctorId((!empty($data['doctorId'])) ? $data['doctorId'] : null);

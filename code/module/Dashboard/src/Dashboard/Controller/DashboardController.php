@@ -24,7 +24,9 @@
      {
         // $this->layout('layout/dashboard');
 
-         return new ViewModel();
+         return new ViewModel(
+            array( 'countPatient'=>'')
+         );
      }
 
 

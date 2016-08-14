@@ -1,0 +1,46 @@
+<div class="form">
+    <?php
+
+        if ($this->errorMessages){
+            echo '<ul class="error">';
+            foreach($this->errorMessages as $message)
+            {
+                echo '<li>'.$message.'</li>';
+            }
+            echo '</ul>';
+        }
+        if ($this->successMessage){
+            echo '<ul class="success">';
+            foreach($this->successMessage as $message)
+            {
+                echo '<li>'.$message.'</li>';
+            }
+            echo '</ul>';
+        }
+    ?>
+    <div class="thumbnail"><i class="fa fa-user-md" aria-hidden="true"></i></div>
+    <form method="POST" action="/user/createuser" class="register-form" id="registration" style="display: block">
+        <input type="text" name="name" placeholder="name" data-validation="length"
+               data-validation-length="min4" required value="<?php echo $this->data['name'] ?>"/>
+        <input type="text" name="username" placeholder="username" data-validation="length" data-validation-length="min4"
+               value="<?php echo $this->data['username'] ?>" required/>
+        <input type="password" name="password" placeholder="password" data-validation="length" data-validation-length="min4"
+
+               required/>
+        <input type="email" name="email" placeholder="email address" data-validation="email" value="<?php echo $this->data['email'] ?>" required/>
+        <input type="date" name="dob" placeholder="date of birth" required  value="<?php echo $this->data['dob'] ?>"/>
+        <input type="tel" name="phone" placeholder="phone" data-validation="length" data-validation-length="min7"
+               value="<?php echo $this->data['phone'] ?>" required/>
+        <input type="text" name="address" placeholder="address" required value="<?php echo $this->data['address'] ?>"/>
+
+        <button type="submit">create</button>
+        <p class="message">Already registered? <a href="#">Sign In</a></p>
+    </form>
+    <form method="POST" action="/user/access" class="login-form" style="display: none">
+        <input type="text" name="username" placeholder="username" data-validation="length" data-validation-length="max100"/>
+        <input type="password" name="password" placeholder="password" data-validation="length" data-validation-length="max100"/>
+        <button type="submit">login</button>
+
+        <p class="message">Not registered? <a href="#">Create an account</a></p>
+    </form>
+</div>

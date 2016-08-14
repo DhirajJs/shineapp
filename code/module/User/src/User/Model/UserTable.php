@@ -40,14 +40,14 @@
             $select->from('users');
 
             if($row->getTypes() =='D') {
-                $select->join(array("d" => "doctor"), "d.doctorId = users.userId");
+                $select->join(array("d" => "doctor"), "d.doctorId = users.username");
 
             }else {
                // $select->join(array("p" => "patient"), "p.userid = users.id");
                 return ;
 
             }
-            $select->where("users.userId = '{$row->getId()}'");
+            $select->where("users.username = '{$row->getId()}'");
 
 
             $resultSet = $this->tableGateway->selectWith($select);
@@ -66,7 +66,7 @@
             $select->from('users');
 
             $select->where(" username = '{$username}' and password = '".md5($password)."'");
-            $select->join(array("p" => "patient"), "p.patientId = users.userId");
+            $select->join(array("p" => "patient"), "p.patientId = users.username");
 
             $dbAdapter = $this->tableGateway->getAdapter();
             $statement = $dbAdapter->createStatement();
@@ -82,6 +82,66 @@
             }else {
                 return array();
             }
+        }
+        public function checkUser($username)
+        {
+            $select = new \Zend\Db\Sql\Select ;
+            $select->from('users');
+            $select->where(" username = '{$username}'");
+
+
+            $dbAdapter = $this->tableGateway->getAdapter();
+            $statement = $dbAdapter->createStatement();
+            $select->prepareStatement($dbAdapter, $statement);
+            $driverResult = $statement->execute(); // execute statement to get result
+
+            $resultSet = new ResultSet();
+            $resultSet->initialize($driverResult);
+            $rowUser = $resultSet->current();
+
+            if($rowUser) {
+                return true;
+            }else {
+                return false;
+            }
+
+        }
+
+        public function  createDoctor($data)
+        {
+            $toReturn['message'] = '';
+            $toReturn['status'] = 'error';
+             if($this->checkUser($data['username'])) {
+                 $toReturn['message'] = 'Username already exist';
+                 $toReturn['status'] = 'error';
+             }else {
+
+
+                 $dbAdapter = $this->tableGateway->getAdapter();
+                 $password = md5($data['password']);
+                 $statement = $dbAdapter->createStatement(
+                         "INSERT INTO `users` ( `username`, `password`, `types`)
+VALUE('{$data['username']}','{$password}','D')");
+
+
+                 $driverResult = $statement->execute();
+                 $resultSet = new ResultSet();
+                 $resultSet->initialize($driverResult);
+
+                 $statement = $dbAdapter->createStatement(
+                     "INSERT INTO `doctor` ( `doctorId`,`name`, `email`, `phone`, `address`,`dob`)
+VALUE('{$data['username']}','{$data['name']}','{$data['email']}','{$data['phone']}','{$data['address']}','{$data['dob']}')");
+
+                 $driverResult = $statement->execute();
+                 $resultSet = new ResultSet();
+                 $resultSet->initialize($driverResult);
+                 $toReturn['message'] = 'Your account has been created. Please login';
+                 $toReturn['status'] = 'sucess';
+
+                 }
+
+                 return $toReturn;
+
         }
 
         public function saveUser(User $user)

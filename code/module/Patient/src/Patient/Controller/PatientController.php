@@ -16,6 +16,7 @@
      public function indexsearchAction()
      {
         // $this->layout('layout/patient');
+
          return new ViewModel(array(
              'patients' => $this->getUsersTable()->fetchAll(),
          ));
@@ -155,13 +156,25 @@
 
      public function  saveAction()
      {
-         $this->flashmessenger()->addSuccessMessage('Patient Saved');
+        // $this->flashmessenger()->addSuccessMessage('Patient Saved');
          $data = $this->getRequest()->getPost();
-         $this->getUsersTable()->save($data);
+         $return = $this->getUsersTable()->save($data);
+         if($return['status'] =='error') {
+             $this->flashmessenger()->addErrorMessage($return['message']);
+
+             return new ViewModel(array(
+                 'data' => $data,
+                 'errorMessages'  => $this->flashmessenger()->getErrorMessages(),
+                 'successMessage'  => $this->flashmessenger()->getSuccessMessages()
+             ));
+
+         }
+         $this->flashmessenger()->addSuccessMessage($return['message']);
          return $this->redirect()
              ->toRoute('patient',
                  array(
                      'action' => 'add',
+                     'successMessage'  => $this->flashmessenger()->getSuccessMessages()
                  )
              );
      }

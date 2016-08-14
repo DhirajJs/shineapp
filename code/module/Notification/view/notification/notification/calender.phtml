@@ -38,9 +38,25 @@
 
                 },
                 <?php endforeach; ?>
-            ]
+            ],
+            eventAfterAllRender: function(event, element) {
+
+                $('.fc-time').each(function (index,item) {
+                    var $item = $(item),
+                        txt = $item.text();
+                 
+                    var textam =txt.replace('a','am');
+
+                    $item.html(textam);
+                    var textpm =textam.replace('p','pm');
+                    $item.html(textpm);
+
+                });
+            }
         });
 
+
     });
+
 
 </script>
