@@ -87,10 +87,11 @@
         <!-- Material Design for Bootstrap -->
         <script src="skin/js/material.js"></script>
         <script src="skin/js/ripples.min.js"></script>
+         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript">
          $.material.init();
-        //30,06,2016,14,22,103,66,97
-        manageCookie.setCookie('reading','0,06,2016,14,22,103');
+      
+      // manageCookie.setCookie('reading','1,01,2018,3,33,pm,126');
           if(!manageCookie.getCookie('reading')) {
             alert('No reading to sync');
              window.location.href= 'dashboard.html';
@@ -100,33 +101,118 @@
 
           var dataReading = manageCookie.getCookie('reading').split(',');
           
-          if(dataReading.length>6) {
+          if(dataReading.length>7) {
+            //  //30,06,2016,14,22,103,66,97
             $('.view-reading').addClass('bloodpressure-reading');
             $('#sy strong').html(dataReading[5]);
             $('#di strong').html(dataReading[6]);
             $('#hr strong').html(dataReading[7]);
           }else {
+            //1,01,2018,3,33,pm,93
             $('.view-reading').addClass('diabetes-reading');
-            $('#bs strong').html(dataReading[4]);
+            $('#bs strong').html(dataReading[6]);
+            var date = new Date((parseInt(dataReading[0])<10?'0'+dataReading[0]:dataReading[0])+'-'+dataReading[1]+'-'+dataReading[2]+'-'+dataReading[3]+':'+dataReading[4]+ ' '+dataReading[5]);
+
+                var newreading = dataReading[0]+','+dataReading[1]+','+dataReading[2]+','+date.getHours()+','+date.getMinutes()+','+dataReading[6];
+                manageCookie.setCookie('reading',newreading);
+
           }
+          function alertDismissed() {
+            if( manageCookie.getCookie('reading')) {
+              $('#savebt').trigger('click');
+            }
+          }
+           var setNotification = {status:false,message:'',sms:false};
             $('#savebt').click(function(event){
                 event.preventDefault();
                 $.ajax({
                     type: "POST",
-                    url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/patient/savedetail",
+                  url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/patient/savedetail",
+                  // url: "http://shine.app/patient/savedetail",
                     data: 'id='+manageCookie.getCookie('dbid')+'&data='+manageCookie.getCookie('reading')+'&fasting='+jQuery('#fasting:checked').length,
                     crossDomain: true,
                     cache: false,
                     dataType:'json',
                     beforeSend: function() {
+                     
+                      if(dataReading.length>7) {
+                          setNotification = checkeBPThreshold(dataReading[5],dataReading[6],1);
+                      }else {
+                        setNotification = checkeDiabetesThreshold(dataReading[6],jQuery('#fasting:checked'),1);
+                      }
+                       alert(setNotification.message);
+                      if(setNotification.status){
+                       // alert(setNotification.message);
+                       
+                        var sound = 'file://sound.mp3' ;
+                    //     cordova.plugins.notification.local.registerPermission(function (granted) {
+                    //         showToast(granted ? 'Yes' : 'No');
+                    //     });
+                    //     var now = new Date().getTime(),
+                    // _5_sec_from_now = new Date(now + 5 * 1000);
+                    //     cordova.plugins.notification.local.schedule({
+                    //         id: 1,
+                    //         title: 'Patient App Alert',
+                    //         text: setNotification.message,
+                    //         at: _5_sec_from_now,
+                    //         sound: sound,
+                    //         badge: 12
+                    //     });
+                      }
                     
+
+                
                     },
                     success: function(response) {
-                    manageCookie.removeCookie('reading');
+                      if(!setNotification){
+                        manageCookie.removeCookie('reading');
+                      
+                     
                     alert('Your data has been sync');
-                   //  window.location.href= 'dashboard.html';
+                    window.location.href= 'dashboard.html';
+                    } else {
+                       alert('You need to set an appointment');
+                       manageCookie.setCookie('messageAppointment',setNotification.message);
+                     
+                       $.ajax({
+                        type: "POST",
+                        url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/patient/responsibledetail",
+                        data: 'id='+manageCookie.getCookie('dbid'),
+                        crossDomain: true,
+                        cache: false,
+                        dataType:'json',
+                        beforeSend: function() {
+                           
+                        },
+                        success: function(response) {
+                              try{
+                                SMS.sendSMS(response.responsible['phone'],setNotification.message,function(){
+                                  alert('Responsible party alerted');
+                                }, function(err){});
+                              }catch(e){
+
+                                
+                              }
+                               window.location.href= 'appointment.html';
+                            
+                        },
+
+                       
+
+                    });
+                               
+                       
+                  }
                     
                     },
+                    error:function(response){
+                      navigator.notification.alert(
+                    'Unable to sync data',  // message
+                    'alertDismissed',
+                    'Sync reading',            // title
+                    'try again'                  // buttonName
+                        );
+                    }
                 
                 });
             })

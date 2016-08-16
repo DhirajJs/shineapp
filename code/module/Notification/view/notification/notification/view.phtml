@@ -22,12 +22,17 @@
                 <!-- /.panel-heading -->
                 <div class="panel-body">
                     <div class="list-group">
+                        <?php if($notification): ?>
                         <?php foreach ($notification as $row): ?>
                             <div href="#" class="list-group-item">
                                 <i class="fa fa-tasks fa-fw"></i>
                                 <span><strong><?php echo $row['name']; ?></strong></span>
 
                                 <span class="pull-right text-muted small"><em><?php echo $row['date']; ?></em>
+                                    <a href="/notification/delete?id=<?php echo $row['notif_id']; ?>" />
+                                    <i class="fa fa-minus-circle" aria-hidden="true" ></i>
+                                    </a>
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
                                           </span>
                                 <!-- <p>
                                             <i class="fa fa-envelope fa-fw"></i>  <span><?php echo $row['email']; ?></span>
@@ -50,12 +55,16 @@
                                     <div class="form-approve" id="form-<?php echo $row['notif_id']; ?>">
                                         <form method="post"
                                               action="/notification/approve">
-                                            Set Appointment Time<input type="datetime-local" name="datetime">
-                                            <input type="submit" name="approvedNow" value="Approve"/>
+                                            Appointment Description<input type="text" name="request" id ="request" required value="<?php echo $row['request']?>">
+                                            Set Appointment Time<input type="datetime-local" name="datetime" required>
+                                            <input type="submit" name="approvedNow" class="approvedNow" value="Approve"/>
                                             <input type="hidden" name="notif_id"
                                                    value="<?php echo $row['notif_id']; ?>"/>
                                             <input type="hidden" name="patientId"
                                                    value="<?php echo $row['patientId']; ?>"/>
+                                            <input type="hidden" name="approved" id="approved"
+                                                   value="N"/>
+                                            <input type="submit" name="update" value="Update" class="update" style="display: none;"/>
                                         </form>
                                     </div>
 
@@ -64,6 +73,9 @@
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
+                            <?php else: ?>
+                            No notification
+                        <?php endif; ?>
                     </div>
 
                 </div>
@@ -82,12 +94,22 @@
         $('.ios-switch').click(function(){
             var $_self = $(this);
             var form = $('#form-'+$_self.data('id'));
+            $_self.parents('.list-group-item').find('form .update').hide();
+            $_self.parents('.list-group-item').find('form .approvedNow').show();
             if($_self.is(':checked')) {
 
                 form.slideDown();
+                $('#approved').val('Y');
             }else {
                 form.slideUp();
+                $('#approved').val('N');
             }
+        })
+        $('.fa-pencil').click(function () {
+            var $this = $(this);
+            $this.parents('.list-group-item').find('.form-approve').slideDown();
+            $this.parents('.list-group-item').find('.form-approve .update').show();
+            $this.parents('.list-group-item').find('.form-approve .approvedNow').hide();
         })
     })
 </script>

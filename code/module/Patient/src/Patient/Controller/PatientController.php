@@ -42,7 +42,7 @@
 
      public function updateAction()
      {
-         $this->layout('layout/patient');
+        // $this->layout('layout/patient');
          $data = $this->getRequest()->getPost();
 
          $patientDetails =  $this->getUsersTable()->update($data->toArray());
@@ -58,6 +58,44 @@
 
 
              );;
+     }
+
+     public function addmedicationAction()
+     {
+         $data = $this->getRequest()->getPost();
+
+         $this->getUsersTable()->addmedication($data->toArray());
+         $this->flashmessenger()->addSuccessMessage('Medication added');
+         return $this->redirect()
+             ->toRoute('patient',
+                 array(
+                     'action' => 'view',
+
+                 ),array( 'query' => array(
+                     'id'=>$data['id'],
+                 ))
+
+
+             );
+     }
+
+     public function updatemedicationAction()
+     {
+         $data = $this->getRequest()->getPost();
+
+         $this->getUsersTable()->updatemedication($data->toArray());
+         $this->flashmessenger()->addSuccessMessage('Medication updated');
+         return $this->redirect()
+             ->toRoute('patient',
+                 array(
+                     'action' => 'view',
+
+                 ),array( 'query' => array(
+                     'id'=>$data['id'],
+                 ))
+
+
+             );
      }
 
      public function updateajaxAction()

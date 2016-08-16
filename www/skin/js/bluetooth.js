@@ -16,9 +16,16 @@ var app = {
         //deviceList.ontouchstart = app.connect; // assume not scrolling
         //refreshButton.ontouchstart = app.list;
         //disconnectButton.ontouchstart = app.disconnect;
-        
+        bluetoothSerial.isEnabled(function(){
+        $('#syncData span').html('Data Sync').parent().removeAttr('disabled');
+          bluetoothSerial.subscribe('\n', app.onData, app.onError);
+
+        }, function(){
+             alert("Bluetooth is *not* enabled");
+        });
        // app.list();
-        app.connect();
+       bluetoothSerial.isConnected(function(){},function(){
+        app.connect();});
        
         // throttle changes
         var throttledOnColorChange = _.throttle(app.onColorChange, 200);
@@ -43,7 +50,7 @@ var app = {
     onData: function(data) { // data received from Arduino
         //console.log(data);
         app.setStatus(data);
-         if(data && data!=1){ 
+         if(data && data!=1 && data.split(',').length>2){ 
             
             manageCookie.setCookie('reading',data);
             window.location.href="healthview.html";

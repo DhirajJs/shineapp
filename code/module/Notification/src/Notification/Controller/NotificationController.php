@@ -15,6 +15,13 @@
 
      public function  calenderAction()
      {
+         if(!\User\Model\User::isLogin()) {
+             return $this->redirect()
+                 ->toRoute('user',
+                     array('action' => 'login',
+                     )
+                 );
+         }
          return new ViewModel(array(
              'calender' => $this->getUsersTable()->fetchAll(),
 
@@ -23,6 +30,13 @@
 
      public function  viewAction()
      {
+         if(!\User\Model\User::isLogin()) {
+             return $this->redirect()
+                 ->toRoute('user',
+                     array('action' => 'login',
+                     )
+                 );
+         }
          return new ViewModel(array(
              'notification' => $this->getUsersTable()->getNotification(),
              'successMessage'  => $this->flashmessenger()->getSuccessMessages()
@@ -31,6 +45,13 @@
      }
      public function  approveAction()
      {
+         if(!\User\Model\User::isLogin()) {
+             return $this->redirect()
+                 ->toRoute('user',
+                     array('action' => 'login',
+                     )
+                 );
+         }
          $this->flashmessenger()->addSuccessMessage('Appointment approved');
          $data = $this->getRequest()->getPost();
          $this->getUsersTable()->approve($data);
@@ -44,6 +65,13 @@
 
      public function  addAction()
      {
+         if(!\User\Model\User::isLogin()) {
+             return $this->redirect()
+                 ->toRoute('user',
+                     array('action' => 'login',
+                     )
+                 );
+         }
          return new ViewModel(array(
              'patient' => $this->getUsersTable()->getPatient(),
              'successMessage'  => $this->flashmessenger()->getSuccessMessages()
@@ -74,10 +102,25 @@
          $data['approved'] = 'N';
          $this->getUsersTable()->save($data);
          return new JsonModel(array(
-             'message'  => 'Your appointmnent is being reviewed',
+             'message'  => 'Your appointment is being reviewed',
 
          ));
 
+     }
+
+     public function deleteAction()
+     {
+         $id = $this->getRequest()->getQuery('id', null);
+
+         if($id) {
+             $this->getUsersTable()->deleteNotification($id);
+         }
+         return $this->redirect()
+             ->toRoute('notification',
+                 array(
+                     'action' => 'view',
+                 )
+             );
      }
 
      public function getUsersTable() {

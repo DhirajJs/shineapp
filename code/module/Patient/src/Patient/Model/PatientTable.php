@@ -351,7 +351,7 @@
             $detail = explode(',',$data['data']);
             $dbAdapter = $this->tableGateway->getAdapter();
             $user_session = new Container('user');
-            if(sizeof($detail)>6) {
+            if(sizeof($detail)>7) {
                 $statement = $dbAdapter->createStatement(
                     "INSERT INTO `bloodpressure` ( `date`, `systolic`, `diastolic`, `patientId`, `heartRate`)
 VALUE('{$detail[2]}-{$detail[1]}-{$detail[0]} {$detail[3]}:{$detail[4]}','{$detail[5]}','{$detail[6]}','{$id}','{$detail[7]}')"
@@ -368,5 +368,39 @@ VALUE('{$detail[2]}-{$detail[1]}-{$detail[0]} {$detail[3]}:{$detail[4]}','{$deta
             $resultSet = new ResultSet();
             $resultSet->initialize($driverResult);
 
+        }
+
+        public  function addmedication($data)
+        {
+            $id = $data['id'];
+            $dbAdapter = $this->tableGateway->getAdapter();
+            $user_session = new Container('user');
+
+            $statement = $dbAdapter->createStatement(
+                "INSERT INTO `consultation` ( `patientId`, `bmi`, `medication`, `date`, `doctorId`,`consultation_details`)
+VALUE('{$id}','{$data['bmi']}','{$data['medication']}',now(),'{$user_session['user']->getId()}','{$data['consultation_details']}')"
+            );
+            $driverResult = $statement->execute();
+            $resultSet = new ResultSet();
+            $resultSet->initialize($driverResult);
+
+        }
+
+        public function  updatemedication($data)
+        {
+            $id = $data['consultationId'];
+
+            $dbAdapter = $this->tableGateway->getAdapter();
+            $user_session = new Container('user');
+
+            $statement = $dbAdapter->createStatement(
+                "Update  `consultation`  set bmi ='{$data['bmi']}', 
+                medication = '{$data['medication']}', date=now(),
+                consultation_details ='{$data['consultation_details']}'
+                where consultationId = $id
+                ");
+            $driverResult = $statement->execute();
+            $resultSet = new ResultSet();
+            $resultSet->initialize($driverResult);
         }
     }

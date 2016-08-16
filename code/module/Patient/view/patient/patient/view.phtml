@@ -1,4 +1,4 @@
-<div class="form">
+<div class="form" xmlns="http://www.w3.org/1999/html">
     <?php
         if ($this->errorMessages) {
             echo '<ul class="error">';
@@ -79,6 +79,8 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <i class="fa fa-info-circle fa-fw"></i>  Consultation Details
+
+                                <i class="fa fa-plus-circle fa-fw" data-toggle="modal" data-target="#medicationAdd"></i>
                             </div>
                             <!-- /.panel-heading -->
                             <div class="panel-body">
@@ -90,6 +92,7 @@
                                             <th>Medication</th>
                                             <th>Date</th>
                                             <th>Consultation comment</th>
+                                            <th></th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -100,6 +103,8 @@
                                                 <td><?php echo $medication['medication']; ?></td>
                                                 <td><?php echo $medication['date']; ?></td>
                                                 <td><?php echo $medication['consultation_details']; ?></td>
+                                                <td><i class="fa fa-edit fa-fw" data-toggle="modal"
+                                                       data-target="#medicationEdit-<?php echo $medication['consultationId'] ?>"></i></td>
                                             </tr>
                                         <?php endforeach; ?>
                                             <?php else: ?>
@@ -171,11 +176,92 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+        <div class="modal fade " id="medicationAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="myModalLabel">Edit</h4>
+                    </div>
+                    <?php
+                    ?>
+                    <form method="POST" action="/patient/addmedication" class="login-form">
+                        <div class="modal-body">
+                            <div class="dashboard form">
+                                <p class="field">BMI</p>
+                                <input type="text" name="bmi" placeholder="bmi" required data-validation="length" required data-validation-length="min4"
+                                       />
+                                <p class="field">Medication</p>
+                                <input type="text" name="medication" placeholder=" Medication" required data-validation="required"
+                                       required  />
+                                <p class="field">Consultation Details</p>
+                                <textarea name="consultation_details" placeholder=" Consultation Details" required required data-validation="required"
+                                /></textarea>
+                               </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" value="<?php echo $this->patientDetails['details']['id'] ?>" name="id" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="update">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <?php if($this->patientDetails['medication']): ?>
+        <?php foreach ($this->patientDetails['medication'] as $medication): ?>
+
+
+                <div class="modal fade " id="medicationEdit-<?php echo $medication['consultationId'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h4 class="modal-title" id="myModalLabel">Edit</h4>
+                            </div>
+                            <?php
+                            ?>
+                            <form method="POST" action="/patient/updatemedication" class="login-form">
+                                <div class="modal-body">
+                                    <div class="dashboard form">
+                                        <p class="field">BMI</p>
+                                        <input type="text" name="bmi" placeholder="bmi"
+                                               required data-validation="length" required data-validation-length="min4"
+                                       value="<?php echo $medication['bmi']; ?>" />
+                                        <p class="field">Medication</p>
+                                        <input type="text" name="medication" placeholder=" Medication"
+                                               required data-validation="required"
+                                               required  value="<?php echo $medication['medication']; ?>" />
+                                        <p class="field">Consultation Details</p>
+                                        <textarea name="consultation_details" placeholder=" Consultation Details"
+                                                  required required data-validation="required"
+                                        /><?php echo $medication['consultation_details']; ?></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="hidden" value="<?php echo $this->patientDetails['details']['id'] ?>" name="id" />
+                                    <input type="hidden" value="<?php echo $medication['consultationId'] ?>" name="consultationId" />
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" name="update">Update changes</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+
+        <?php endforeach; ?>
+        <?php endif;?>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
     $(function () {
         $('#formEdit').appendTo($('body'));
+        $('#medicationAdd').appendTo($('body'));
+        $('[id^=medicationEdit-]').appendTo($('body'));
     })
 
     google.charts.load('current', {

@@ -47,9 +47,9 @@
         }
 
         return $this->redirect()
-            ->toRoute('dashboard',
+            ->toRoute('notification',
                 array(
-                    'action' => 'index',
+                    'action' => 'view',
                 )
             );
 

@@ -75,7 +75,7 @@
             $select->join(array("p" => "patient"), "notifications.patientId = p.patientId");
 
 
-            $select->where(" notifications.doctorId = '{$user_session['user']->getId()}'");
+            $select->where(" notifications.doctorId = '{$user_session['user']->getId()}' and approved='N'");
             $dbAdapter = $this->tableGateway->getAdapter();
             $statement = $dbAdapter->createStatement();
 
@@ -91,6 +91,26 @@
             return $rows;
         }
 
+        public  function  deleteNotification($id)
+        {
+            $dbAdapter = $this->tableGateway->getAdapter();
+
+            $statement = $dbAdapter->createStatement(
+                "Delete  from notifications where  notif_id={$id}"
+            );
+
+            $driverResult = $statement->execute();
+            $resultSet = new ResultSet();
+            $resultSet->initialize($driverResult);
+
+            $statement = $dbAdapter->createStatement(
+                "Delete  from doc_calendar where  notif_id={$id}"
+            );
+
+            $driverResult = $statement->execute();
+            $resultSet = new ResultSet();
+            $resultSet->initialize($driverResult);
+        }
 
         public  function save($data)
         {
@@ -124,11 +144,11 @@
 
 
 
-            $update = "UPDATE notifications SET approved='Y' WHERE notif_id=" . $_POST['notif_id'];
+            $update = "UPDATE notifications SET approved='{$data['approved']}' ,request ='{$data['request']}' WHERE notif_id=" . $_POST['notif_id'];
             $user_session = new Container('user');
             $statement = $dbAdapter->createStatement(
-                "INSERT INTO doc_calendar(patientId,doctorId,date) values ('{$data['patientId']}',
-'{$user_session['user']->getId()}','{$data['datetime']}')"
+                "INSERT INTO doc_calendar(patientId,doctorId,date,notif_id) values ('{$data['patientId']}',
+'{$user_session['user']->getId()}','{$data['datetime']}', '{$_POST['notif_id']}')"
             );
 
             $driverResult = $statement->execute();

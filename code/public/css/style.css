@@ -32,7 +32,7 @@
   display: block;
   width: 100%;
 }
-.form input,.form select,.form2 input,.form2 select {
+.form input,.form select,.form2 input,.form2 select,.form textarea {
   outline: 0;
   background: #f2f2f2;
   width: 100%;
@@ -440,7 +440,7 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
 .form-approve {
   display: none;
 }
-.chat-panel .fa-edit {
+.chat-panel .fa-edit,.medication .fa-edit,.medication .fa-plus-circle {
   float: right;
 }
 .modal-content .form {
@@ -494,4 +494,11 @@ margin: 20px auto;
 }
 .container-patient .col-1 .patient-details {
 
+}
+
+.notifications-panel .fa-minus-circle {
+ color: #db0009;
+}
+.notifications-panel .fa-pencil {
+    color:#0c0c0c;
 }

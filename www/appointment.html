@@ -75,7 +75,25 @@
  
      $.material.init();
      $(function(){
-     
+      var appointmentMessage = manageCookie.getCookie('messageAppointment');
+      var readingTxt = '';
+      if(appointmentMessage) {
+        $('#request').val(appointmentMessage);
+           var dataReading = manageCookie.getCookie('reading').split(',');
+          alert(manageCookie.getCookie('reading'));
+          if(dataReading.length>7) {
+           
+           
+            readingTxt = 'Systolic: '+dataReading[5];
+            readingTxt += ' Diastolic: '+dataReading[6];
+
+          }else {
+            
+             readingTxt = 'Sugar lever: '+ dataReading[5];
+          }
+           $('#request').val(appointmentMessage+' '+readingTxt);
+      }
+      // manageCookie.setCookie('messageAppointment',setNotification.message);
    
        $('#savebt').click(function(event){
             event.preventDefault();
@@ -93,7 +111,7 @@
                     cache: false,
                     dataType:'json',
                     beforeSend: function() {
-                       
+                        manageCookie.removeCookie('messageAppointment');
                     },
                     success: function(response) {
 

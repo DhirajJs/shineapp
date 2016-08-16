@@ -24,27 +24,13 @@
     <ul class="nav setting-nav" id="side-menu">
 
                    <li>
-                    <div class="well page active" id="fileinput" style="display: block;">
-            
-        <form method="post" action="">
-            <div class="form-group label-static is-empty">
-                <label for="reminder" class="control-label">Description</label>
-                <input type="text"  required class="form-control" id="reminder" name="reminder" placeholder="Description">
-
-                <p class="help-block">Please enter a reminder</p>
-              </div>
-              <div class="form-group label-static is-empty clockpicker">
-                <label for="time" class="control-label">Time</label>
-                <input type="text"  required class="form-control" id="time" name="time" placeholder="Time">
-       
-
-                <!-- <p class="help-block">Please enter a valid email address<code>john@gmail.com</code></p> -->
-              </div>
-
-    
-                        <a href="reminders.html" class="btn btn-raised btn-default"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> 
-                        <span>Back</span></a>
-                        </li>
+   <div class="list-group">
+   </div>
+   </li>
+   <li>
+                <a href="reminders.html" class="btn btn-raised btn-default"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                  <span>Back</span></a>
+                </li>
 
 
                 </ul>
@@ -67,16 +53,42 @@
  <script type="text/javascript">
  
      $.material.init();
-     $(function(){
-      $('.clockpicker').clockpicker({placement: 'bottom',
-    align: 'left',
-    autoclose: true,
-    'default': 'now'});
+  
+      var reminder = manageCookie.getCookie('reminders');
+      reminder = JSON.parse(reminder);
+      if(reminder.length){
+        
+          //reminder.push({id:id,text:$('#reminder').val(),at:$('#date').now()+' '+$('#time').val(),recurring:$('#recurring').is('checked')});
+          for(index in reminder) {
+            var div = $('<div/>',{class:'list-group-item'});
+           
+            if( reminder[index] ){
+            div.html('<i class="fa fa-trash fa-fw pull-right" rel="'+reminder[index].id+'" onclick="removeReminder('+reminder[index].id+')"></i>'+
+              '<span class="pull-left text-muted small"><em>'+reminder[index].at+'</em>'+
+              '<p><span>'+reminder[index].text+' </span></p>');
+            $('.list-group').append(div);
+          }
 
-       
-   })
+          }
+      }else{
+        $('.list-group').html('No reminder');
+      }
      //viewajaxAction
-    
+     function removeReminder(id) {
+   
+        var reminder = manageCookie.getCookie('reminders');
+        reminder = JSON.parse(reminder);
+        var newReminder = new Array();
+        for(index in reminder) {
+          if(reminder[index].id!=id){
+          newReminder.push(reminder[index]);
+       }
+          manageCookie.setCookie('reminders',JSON.stringify(newReminder));
+              cordova.plugins.notification.local.clear(id, callback);
+       }
+         window.location.href= 'viewreminder.html';
+     }
+
  </script>
 
 </body>
