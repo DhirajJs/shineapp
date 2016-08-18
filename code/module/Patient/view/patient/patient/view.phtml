@@ -132,6 +132,13 @@
                 <div class="diabetes-model" data-remodal-id="bloodpressure">
                     <div id="chart_div_bp"></div>
                 </div>
+                <form name="date" action="" method="post" id="datefilter" style="width: 50%; margin: 0 auto;">
+                    <p class="field">Date filter</p>
+
+                <input type="month" name="month" onchange="document.getElementById('datefilter').submit()"/>
+
+                    <input type="hidden" value="<?php echo $this->patientDetails['details']['id'] ?>" name="id" />
+                </form>
             </div>
 </div>
 

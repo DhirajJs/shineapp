@@ -58,11 +58,11 @@
             return $rowUser;
         }
 
-        public function loadView($id)
+        public function loadView($id,$date='')
         {
             $patientDetails['details'] = $this->getPatient($id);
-            $patientDetails['bloodPresure'] = $this->getBloodPressureInfo($id);
-            $patientDetails['diabetes'] = $this->getDiabetesInfo($id);
+            $patientDetails['bloodPresure'] = $this->getBloodPressureInfo($id,$date);
+            $patientDetails['diabetes'] = $this->getDiabetesInfo($id,$date);
             $patientDetails['medication'] = $this->getMedication($id);
 
             return $patientDetails;
@@ -90,10 +90,12 @@
             return $consultation;
 
         }
-        public function getDiabetesInfo($id)
+        public function getDiabetesInfo($id,$date='')
         {
            // $sql = "SELECT * FROM diabetes WHERE patientId='{$_POST['id']}' order by `date` asc";
-            $date = @date('Y-m',@strtotime('now'));
+            if(!$date){
+                $date = @date('Y-m', @strtotime('now'));
+            }
             $select = new Select();
             $select->from('diabetes')->where("  patientId = '{$id}' and `date` like '{$date}%' order by `date` asc");
             $dbAdapter = $this->tableGateway->getAdapter();
@@ -113,10 +115,12 @@
 
         }
 
-        public function getBloodPressureInfo($id)
+        public function getBloodPressureInfo($id,$date='')
         {
             //  $sqlBP = "SELECT * FROM bloodpressure WHERE patientId='{$_POST['id']}' order by `date` asc";
-            $date = @date('Y-m',@strtotime('now'));
+            if(!$date) {
+                $date = @date('Y-m', @strtotime('now'));
+            }
             $select = new Select();
             $select->from('bloodpressure')->where("  patientId = '{$id}' and `date` like '{$date}%' order by `date` asc");
             $dbAdapter = $this->tableGateway->getAdapter();

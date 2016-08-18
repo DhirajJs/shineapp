@@ -26,12 +26,13 @@
      {
          //$this->layout('layout/patient');
          $id = $this->getRequest()->getPost('id', null);
+         $date = $this->getRequest()->getPost('month', null);
 
          if(!$id) {
              $id = $this->getRequest()->getQuery('id', null);
          }
 
-         $patientDetails =  $this->getUsersTable()->loadView($id);
+         $patientDetails =  $this->getUsersTable()->loadView($id,$date);
 
          return new ViewModel(array(
              'errorMessages'   => $this->flashmessenger()->getErrorMessages(),
