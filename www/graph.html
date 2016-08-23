@@ -20,8 +20,12 @@
 <body>
 <div class="form dashboard">
     <div class="dt-title"><i class="fa fa-user-md" aria-hidden="true"></i> Reading</div>
-
-     <div class="col-2">
+<div class="btn-group btn-group-justified btn-group-raised">
+  <a href="javascript:void(0)" class="btn" id="graph-view">Graph view</a>
+  <a href="javascript:void(0)" class="btn" id="table-view" >Table view</a>
+ 
+</div>
+     <div class="col-2 graph-view">
                 <div class="diabetes-model" data-remodal-id="diabetes">
                     <div id="chart_div_diabetes"></div>
                 </div>
@@ -29,18 +33,60 @@
                     <div id="chart_div_bp"></div>
                 </div>
             </div>
-    <ul class="nav" id="side-menu">
-
-                  
-                    <li>
-                        <a href="dashboard.html" class="btn btn-raised btn-default"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> 
-                        <span>Back</span></a>
-                        </li>
 
 
-                </ul>
+     <div class="table-view" style="display:none">
+  
+  <h3><small><code>Blood Sugar Level</code></small></h3>
+    <table class="table table-striped table-hover  bloodlevel-sugar-table">
+  <thead>
+  <tr>
     
+    <th>Date</th>
+    <th>Glucose Level</th>
+    <th>Fasting</th>
+  </tr>
+  </thead>
+  <tbody>
+ 
+  </tbody>
+</table>
+
+  <h3><small><code>Blood Pressure</code></small></h3>
+ <table class="table table-striped table-hover  blood-pressure-table">
+  <thead>
+  <tr>
+    
+    <th>Date</th>
+    <th>Systolic</th>
+    <th>Diastolic</th>
+  </tr>
+  </thead>
+  <tbody>
+ 
+  </tbody>
+</table>
 </div>
+ <div class="form-group is-empty">
+                <label for="inputEmail" class="col-md-2 control-label">Date Filter</label>
+
+                <div class="col-md">
+                  <input type="month" class="form-control" id="month" placeholder="Date">
+                </div>
+              </div>
+
+    <ul class="nav" id="side-menu">
+       
+                  
+           <li>
+            <a href="dashboard.html" class="btn btn-raised btn-default"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> 
+            <span>Back</span></a>
+            </li>
+
+
+    </ul>
+</div>
+ 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
@@ -55,11 +101,13 @@
 
 
  <script type="text/javascript">
- 
+  var response = '';
+  var chartD,chartB;
      $.material.init();
                 $.ajax({
                     type: "POST",
                     url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/patient/viewajax",
+                    //url: "http://shine.app/patient/viewajax",
                     data: 'id='+manageCookie.getCookie('dbid'),
                     crossDomain: true,
                     cache: false,
@@ -67,27 +115,51 @@
                     beforeSend: function() {
                        
                     },
-                    success: function(response) {
+                    success: function(data) {
                         google.charts.load('current', {
         packages: ['corechart', 'line']
     });
+                        response = data;
     google.charts.setOnLoadCallback(drawBasicDiabeted);
    google.charts.setOnLoadCallback(drawBasicBloodPressure);
 
-    function drawBasicDiabeted() {
+   
+                      
+                   
+                    },
+                    complete: function (data) {
+                       // $('#console').html(data);
+                       //  $("#login").val('Connecting...');
+                    },
+                    error:function(data,status,errorThrown) {
+                      // $('#console').html(errorThrown); 
+                    }
+
+                });
+     function drawBasicDiabeted() {
         var data = new google.visualization.DataTable();
         data.addColumn('date', 'X');
-        data.addColumn('number', 'Diabetes progess');
+        data.addColumn('number', 'Glucose level');
 
         data.addColumn({type:'string', role:'tooltip'});
         var diabetesAr = new Array();
     
          var $array = new Array();
-        for(index in response.patientDetails.diabetes){
+         var table = $('.bloodlevel-sugar-table');
+          table.find('tbody').html('');
+        for(index in response.patientDetails.diabetes){ 
             var $time =  new Date(response.patientDetails.diabetes[index].date)
             bloodSugarLevel = parseFloat(response.patientDetails.diabetes[index].bloodSugarLevel),
-             $toolTip= 'On '+$time.toString().replace(/GMT * /,''),+" "+"Diabetes progess: "+bloodSugarLevel+" "+(response.patientDetails.diabetes[index].fasting?' and was taken Fasting':'');
+             $toolTip= 'On '+$time.getDate()+ '-'+($time.getMonth()+1)+'-'+$time.getFullYear()+" "+"Diabetes progess: "+bloodSugarLevel+" "+(response.patientDetails.diabetes[index].fasting?' and was taken Fasting':'');
             $array.push([$time,bloodSugarLevel,$toolTip]);// "[{$time},{$diabetes['bloodSugarLevel']}]";
+            var td1 = $('<td/>').html($time.getDate()+ '-'+($time.getMonth()+1)+'-'+$time.getFullYear());
+            var td2 = $('<td/>').html(bloodSugarLevel);
+            var td3 = $('<td/>').html(response.patientDetails.diabetes[index].fasting==1?'Yes':'');
+            var tr = $('<tr/>',{'class':(index%2)?'active':''});
+            tr.append(td1);
+            tr.append(td2);
+            tr.append(td3);
+            table.find('tbody').append(tr);
         }
         
        
@@ -113,8 +185,10 @@
 
 
         };
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div_diabetes'));
-        chart.draw(data, options);
+        if(!chartD){
+         chartD = new google.visualization.LineChart(document.getElementById('chart_div_diabetes'));
+        }
+        chartD.draw(data, options);
     }
 
     function drawBasicBloodPressure() {
@@ -125,13 +199,24 @@
         //systolic`, `diastolic`, `patientId`, `heartRate`
         var bpl = new Array();
         var $array = new Array();
-
+        var table = $('.blood-pressure-table');
+        table.find('tbody').html('');
         for(index in response.patientDetails.bloodPresure){
 
             var $time =  new Date(response.patientDetails.bloodPresure[index].date);
             var systolic =parseFloat(response.patientDetails.bloodPresure[index].systolic);
             var diastolic =parseFloat(response.patientDetails.bloodPresure[index].diastolic);
-            $array.push([$time,systolic,diastolic]);// "[{$time},{$diabetes['bloodSugarLevel']}]";
+            $array.push([$time,systolic,diastolic]);
+
+
+            var td1 = $('<td/>').html($time.getDate()+ '-'+($time.getMonth()+1)+'-'+$time.getFullYear());
+            var td2 = $('<td/>').html(bloodSugarLevel);
+            var td3 = $('<td/>').html(diastolic);
+            var tr = $('<tr/>',{'class':(index%2)?'active':''});
+            tr.append(td1);
+            tr.append(td2);
+            tr.append(td3);
+            table.find('tbody').append(tr);
         }
       
         data.addRows($array);
@@ -154,9 +239,46 @@
                 }
             }
         };
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div_bp'));
-        chart.draw(data, options);
+        if(!chartB){
+         chartB = new google.visualization.LineChart(document.getElementById('chart_div_bp'));
+        }
+        chartB.draw(data, options);
     }
+    
+    $(function(){
+        $('#graph-view').click(function(event){
+                event.preventDefault();
+                $('.graph-view').show();
+                $('.table-view').hide();
+        });
+
+         $('#table-view').click(function(event){
+                event.preventDefault();
+                $('.graph-view').hide();
+                $('.table-view').show();
+        })
+         $('#month').change(function(){
+            var val = $(this).val();
+            $.ajax({
+                    type: "POST",
+                    //url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/patient/viewajax",
+                    url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/patient/viewajax",
+                    data: 'id='+manageCookie.getCookie('dbid')+'&date='+val,
+                    crossDomain: true,
+                    cache: false,
+                    dataType:'json',
+                    beforeSend: function() {
+                       
+                    },
+                    success: function(data) {
+    
+                        response = data;
+                        drawBasicDiabeted();
+                        drawBasicBloodPressure();
+    google.charts.setOnLoadCallback(drawBasicDiabeted);
+   google.charts.setOnLoadCallback(drawBasicBloodPressure);
+
+   
                       
                    
                     },
@@ -169,7 +291,9 @@
                     }
 
                 });
-    
+
+         })
+    })
     
  </script>
 

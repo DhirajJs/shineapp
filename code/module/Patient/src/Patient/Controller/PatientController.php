@@ -116,8 +116,9 @@
      {
          //$this->layout('layout/patient');
          $id = $this->getRequest()->getPost('id', null);
+         $date = $this->getRequest()->getPost('date', null);
 
-         $patientDetails =  $this->getUsersTable()->loadView($id);
+         $patientDetails =  $this->getUsersTable()->loadView($id,$date);
 
          return new JsonModel(array(
              'errorMessages'   => $this->flashmessenger()->getErrorMessages(),

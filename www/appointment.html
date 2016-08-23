@@ -26,16 +26,16 @@
                    <li>
                     <div class="well page active" id="fileinput" style="display: block;">
             
-        <form method="post" action="">
+        <form method="post" action="" id="formApt">
             <div class="form-group label-static is-empty">
                 <label for="request" class="control-label">Request description</label>
-                <input type="text"  required class="form-control" id="request" name="request" placeholder="Request">
+                <input type="text"  required class="form-control" id="request" name="request" placeholder="Request" required>
 
                 <p class="help-block">Please enter a time</p>
               </div>
               <div class="form-group label-static is-empty clockpicker">
                 <label for="time" class="control-label">Time</label>
-                <input type="datetime-local"  required class="form-control" id="time" name="time" placeholder="Time" data-field="datetime" data-view="Popup" readonly>
+                <input type="datetime-local"  required class="form-control" id="time" name="time" placeholder="Time" data-field="datetime" data-view="Popup" >
        <div id="dtBox"></div>
 
                 <!-- <p class="help-block">Please enter a valid email address<code>john@gmail.com</code></p> -->
@@ -80,7 +80,7 @@
       if(appointmentMessage) {
         $('#request').val(appointmentMessage);
            var dataReading = manageCookie.getCookie('reading').split(',');
-          alert(manageCookie.getCookie('reading'));
+        
           if(dataReading.length>7) {
            
            
@@ -103,6 +103,8 @@
                 'request':$('#request').val(),
                 'datetime':time.getFullYear()+'-'+time.getMonth()+'-'+time.getDate()+ ' '+time.getHours()+':'+time.getMinutes()
             }
+            if( document.getElementById('formApt').checkValidity()){
+            
              $.ajax({
                     type: "POST",
                     url: "http://phpstack-24842-53261-140149.cloudwaysapps.com/notification/saveajax",
@@ -115,14 +117,14 @@
                     },
                     success: function(response) {
 
-                            $('#message').show().addClass('success').children('li').html(response.message)
+                            $('#message').show().addClass('success').children('li').html(response.message);
                            
-
-                        
                     },
                     
 
                 });
+              }
+            
        })
        })
      //viewajaxAction

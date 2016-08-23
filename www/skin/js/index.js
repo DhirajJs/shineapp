@@ -85,54 +85,26 @@ $(function(){
 
 function checkeDiabetesThreshold(gl,fasting)
 {
-    /*
-    If (FBS):
-If (100<glucoseLevel):
-          Diabetes = “Normal”;
-     endIf;
- 
-     If (100=<glucoseLevel=< 125):
-          Diabetes = “Pre-diabetes”;
-     endIf;
-If (glucoseLevel=>126):
-          Diabetes = “Diabetes”;
-Alert = “Glucose level not within range”;
-     endIf;
-Endif;
- 
-For Random Blood Sugar:
-If (RBS):
-If (glucoseLevel>=200):
-          Diabetes = “Diabetes”;
-Alert = “Glucose level not within range”;
- 
-     endIf;
-Endif
-     */
     var alert = {status:false,message:'', sms:false};
     if(fasting){
-        if(gl<100) {
-
+        if(gl< 5.6){
             alert.message = 'Normal';
         }
 
-        if(gl>=100 &&  gl<=125){
+        if(gl>=5.6 &&  gl<=6.9){
             alert.message ='Prediabetes'
         }
 
-
-        if(gl>=126){
+        if(gl>=7.0){
             alert.message ='Glucose level not within range';
             alert.status = true;
         }
-
     }else {
-         if(gl>=200){
+         if(gl>=11.1){
             alert.message ='Glucose level not within range';
             alert.status = true;
          }
     }
-    
     return alert ;
 
 }
@@ -154,27 +126,18 @@ Hypertensive Crisis (Emergency care needed) - Systolic is Higher than 180 or Dia
         if(systolic<120 && diastolic<80) {
             alert.status = false;
            alert.message = 'Normal';
-        }
-
-        if((systolic>= 120 && systolic<=139) && (diastolic>= 80 && diastolic<=89)) {
+        }else if((systolic>= 120 && systolic<=139) && (diastolic>= 80 && diastolic<=89)) {
             alert.status = false;
             alert.message = 'Prehypertension, please regual your blood pressure';
-        }
-
-        
-        if((systolic>= 140 && systolic<=159) && (diastolic>= 90 && diastolic<=99)) {
+        }else if((systolic>= 140 && systolic<=159) && (diastolic>= 90 && diastolic<=99)) {
             alert.status = true;
              alert.sms = true;
             alert.message = 'Hypertension stage 1. Emergency care needed';
-        }
-
-         if((systolic>= 160) && (diastolic>= 100)) {
+        }else  if((systolic>= 160) && (diastolic>= 100)) {
             alert.status = true;
             alert.sms = true;
             alert.message = 'Hypertension stage 2. Emergency care needed';
-        }
-
-        if((systolic> 180) && (diastolic> 110)) {
+        }else if((systolic> 180) && (diastolic> 110)) {
             alert.status = true;
              alert.sms = true;
             alert.message = 'Hypertensive Crisis. Emergency care needed';

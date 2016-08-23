@@ -96,13 +96,14 @@
             if(!$date){
                 $date = @date('Y-m', @strtotime('now'));
             }
+
             $select = new Select();
             $select->from('diabetes')->where("  patientId = '{$id}' and `date` like '{$date}%' order by `date` asc");
             $dbAdapter = $this->tableGateway->getAdapter();
             $statement = $dbAdapter->createStatement();
             $select->prepareStatement($dbAdapter, $statement);
             $driverResult = $statement->execute(); // execute statement to get result
-
+           
             $resultSet = new ResultSet();
             $resultSet->initialize($driverResult);
             $diabetes = array();

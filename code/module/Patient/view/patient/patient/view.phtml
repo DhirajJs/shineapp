@@ -287,10 +287,7 @@
         $array = array();
         foreach ($this->patientDetails['diabetes'] as $diabetes) {
 
-            $toolTip= 'On '. @date('d M Y H:i' , @strtotime($diabetes['date'])).
-                " "."Diabetes progess: {$diabetes['bloodSugarLevel']}"." ".
-                ($diabetes['fasting']?' and was taken Fasting':'');
-            ;
+            $toolTip= 'On '. @date('d M Y H:i' , @strtotime($diabetes['date']))." "."Diabetes progess: {$diabetes['bloodSugarLevel']}"." ".($diabetes['fasting']?' and was taken Fasting':'');;
             $time =  @date('d', @strtotime($diabetes['date']));//+'".($diabetes['fasting']?'Fasting:Yes':'Fasting:No'). "'
             $array[] = "[new Date('{$diabetes['date']}'),{$diabetes['bloodSugarLevel']},'{$toolTip}' ]";
         }

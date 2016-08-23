@@ -62,7 +62,8 @@
                   </label>
                   
                 </div>
-
+                <div id="console">
+                </div>
               
               
               <ul class="" id="message" style="display:none">
@@ -140,38 +141,41 @@
                       }else {
                         setNotification = checkeDiabetesThreshold(dataReading[6],jQuery('#fasting:checked'),1);
                       }
+                      if(setNotification.status  && setNotification.message!='Normal'){
                        alert(setNotification.message);
+                      }
                       if(setNotification.status){
-                       // alert(setNotification.message);
+                      
                        
                         var sound = 'file://sound.mp3' ;
-                    //     cordova.plugins.notification.local.registerPermission(function (granted) {
-                    //         showToast(granted ? 'Yes' : 'No');
-                    //     });
-                    //     var now = new Date().getTime(),
-                    // _5_sec_from_now = new Date(now + 5 * 1000);
-                    //     cordova.plugins.notification.local.schedule({
-                    //         id: 1,
-                    //         title: 'Patient App Alert',
-                    //         text: setNotification.message,
-                    //         at: _5_sec_from_now,
-                    //         sound: sound,
-                    //         badge: 12
-                    //     });
+                        cordova.plugins.notification.local.registerPermission(function (granted) {
+                            showToast(granted ? 'Yes' : 'No');
+                        });
+                        var now = new Date().getTime(),
+                    _5_sec_from_now = new Date(now + 5 * 1000);
+                        cordova.plugins.notification.local.schedule({
+                            id: 1,
+                            title: 'Patient App Alert',
+                            text: setNotification.message,
+                            at: _5_sec_from_now,
+                            sound: sound,
+                            badge: 12
+                        });
                       }
                     
 
                 
                     },
                     success: function(response) {
-                      if(!setNotification){
+                      if(!setNotification.status){
                         manageCookie.removeCookie('reading');
-                      
-                     
-                    alert('Your data has been sync');
-                    window.location.href= 'dashboard.html';
+                          
+                         
+                        alert('Your data has been sync');
+                        window.location.href= 'dashboard.html';
                     } else {
-                       alert('You need to set an appointment');
+
+                        jQuery('#console').html('You need to set an appointment').addClass('btn btn-danger');
                        manageCookie.setCookie('messageAppointment',setNotification.message);
                      
                        $.ajax({
@@ -185,15 +189,21 @@
                            
                         },
                         success: function(response) {
+                          if(setNotification.sms){
                               try{
                                 SMS.sendSMS(response.responsible['phone'],setNotification.message,function(){
-                                  alert('Responsible party alerted');
+                                 jQuery('#console').html('Responsible party alerted').addClass('btn btn-danger');
+
                                 }, function(err){});
                               }catch(e){
 
                                 
                               }
+                            }
+                             if(setNotification.status){
+
                                window.location.href= 'appointment.html';
+                             }
                             
                         },
 
