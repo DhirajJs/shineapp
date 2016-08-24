@@ -99,7 +99,7 @@
           }
 
           $(function(){
-          var reading = rc4(dcK,manageCookie.getCookie('reading'));
+          var reading = rc4(dcK,manageCookie.getCookie('reading')).replace('');
           var dataReading = reading.split(',');
           
           if(dataReading.length>7) {
@@ -115,7 +115,7 @@
             var date = new Date((parseInt(dataReading[0])<10?'0'+dataReading[0]:dataReading[0])+'-'+dataReading[1]+'-'+dataReading[2]+'-'+dataReading[3]+':'+dataReading[4]+ ' '+dataReading[5]);
 
                 var newreading = dataReading[0]+','+dataReading[1]+','+dataReading[2]+','+date.getHours()+','+date.getMinutes()+','+dataReading[6];
-                manageCookie.setCookie('reading',newreading);
+                manageCookie.setCookie('reading',rc4(dcK,newreading));
 
           }
           function alertDismissed() {

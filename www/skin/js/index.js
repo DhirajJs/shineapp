@@ -1,7 +1,7 @@
 $('.message a').click(function(){
    $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
 });
-
+ dcK = 'health123';
  manageCookie = {
      /*     Set a cookie's value
          
@@ -215,6 +215,6 @@ function rc4(key, str) {
         s[j] = x;
         res += String.fromCharCode(str.charCodeAt(y) ^ s[(s[i] + s[j]) % 256]);
     }
-    return res;
+    return res.replace('¬',',');
 }
 

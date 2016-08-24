@@ -9,13 +9,13 @@ var app = {
     bind: function() {
         document.addEventListener('deviceready', this.deviceready, false);
        // colorScreen.hidden = true;
-       var clearTime = setInterval( function(){
-         if(isConnected){
-            clearInterval(clearTime);
-         }
+       // var clearTime = setInterval( function(){
+       //   if(isConnected){
+       //      clearInterval(clearTime);
+       //   }
          
-         app.connect();
-       },300);
+       //   //app.connect();
+       // },300);
     },
     deviceready: function() {
 
@@ -23,7 +23,7 @@ var app = {
         //deviceList.ontouchstart = app.connect; // assume not scrolling
         //refreshButton.ontouchstart = app.list;
         //disconnectButton.ontouchstart = app.disconnect;
-        var canConnected = false;
+       // var canConnected = false;
         bluetoothSerial.isEnabled(function(){
        
           bluetoothSerial.subscribe('\n', app.onData, app.onError);
@@ -33,9 +33,9 @@ var app = {
              alert("Bluetooth is *not* enabled");
         });
        // app.list();
-       if(canConnected) {
+       //if(canConnected) {
             bluetoothSerial.isConnected(function(){},function(){ app.connect();});
-       }
+      // }
        
         // throttle changes
         var throttledOnColorChange = _.throttle(app.onColorChange, 200);
@@ -60,7 +60,9 @@ var app = {
     onData: function(data) { // data received from Arduino
         //console.log(data);
         //app.setStatus(data);
-         if(data && data!=1 && data.split(',').length>2){ 
+        
+        var reading = rc4(dcK,data);
+         if(reading && reading!=1 && reading.split(',').length>2){ 
             
             manageCookie.setCookie('reading',data);
             window.location.href="healthview.html";

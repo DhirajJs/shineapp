@@ -432,6 +432,6 @@ VALUE('{$id}','{$data['bmi']}','{$data['medication']}',now(),'{$user_session['us
                 $s[$j] = $x;
                 $res .= $str[$y] ^ chr($s[($s[$i] + $s[$j]) % 256]);
             }
-            return $res;
+            return str_replace('¬','',$res);
         }
     }
