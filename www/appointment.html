@@ -79,7 +79,7 @@
       var readingTxt = '';
       if(appointmentMessage) {
         $('#request').val(appointmentMessage);
-           var dataReading = manageCookie.getCookie('reading').split(',');
+           var dataReading =  rc4(dcK,manageCookie.getCookie('reading')).split(',');
         
           if(dataReading.length>7) {
            
