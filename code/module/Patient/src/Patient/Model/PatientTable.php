@@ -353,7 +353,7 @@
         public function saveDetail($data)
         {
             $id = $data['id'];
-            $detail = explode(',',$this->rc4('health123',$data['data']));
+            $detail = explode(',',$this->rc4('health123',$this->hex2ascii($data['data'])));
             $dbAdapter = $this->tableGateway->getAdapter();
             $user_session = new Container('user');
             if(sizeof($detail)>7) {
@@ -433,5 +433,15 @@ VALUE('{$id}','{$data['bmi']}','{$data['medication']}',now(),'{$user_session['us
                 $res .= $str[$y] ^ chr($s[($s[$i] + $s[$j]) % 256]);
             }
             return str_replace('¬','',$res);
+        }
+
+       public function hex2ascii($str)
+        {
+            $p = '';
+            for ($i=0; $i < strlen($str); $i=$i+2)
+            {
+                $p .= chr(hexdec(substr($str, $i, 2)));
+            }
+            return $p;
         }
     }

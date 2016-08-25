@@ -60,8 +60,8 @@ var app = {
     onData: function(data) { // data received from Arduino
         //console.log(data);
         //app.setStatus(data);
-        
-        var reading = rc4(dcK,data);
+        var hexData = hex_to_ascii(hexData);
+        var reading = rc4(dcK,hexData);
          if(reading && reading!=1 && reading.split(',').length>2){ 
             
             manageCookie.setCookie('reading',data);
