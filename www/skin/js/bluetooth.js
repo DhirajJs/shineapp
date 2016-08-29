@@ -11,23 +11,18 @@ var app = {
        // colorScreen.hidden = true;
     },
     deviceready: function() {
-        // wire buttons to functions
-        //deviceList.ontouchstart = app.connect; // assume not scrolling
-        //refreshButton.ontouchstart = app.list;
-        //disconnectButton.ontouchstart = app.disconnect;
-        bluetoothSerial.isEnabled(function(){
-          app.connect();
-          //bluetoothSerial.subscribe('\n', app.onData, app.onError);
+      bluetoothSerial.isEnabled(function(){
+        $('#syncData span').html('Data Sync').parent().removeAttr('disabled');
+          bluetoothSerial.subscribe('\n', app.onData, app.onError);
 
         }, function(){
              alert("Bluetooth is *not* enabled");
         });
        // app.list();
-       bluetoothSerial.isConnected(function(){
-
-       },function(){
+       bluetoothSerial.isConnected(function(){},function(){
         app.connect();});
-       
+
+
         // throttle changes
         var throttledOnColorChange = _.throttle(app.onColorChange, 200);
         $('input').on('change', throttledOnColorChange);
@@ -44,6 +39,7 @@ var app = {
         app.setStatus("Connecting...");
         var device = '98:D3:31:80:6E:20';//e.target.getAttribute('deviceId');
         console.log("Requesting connection to " + device);
+       // alert("Requesting connection to " + device);
         $('#syncData span').html('Connecting...');
         bluetoothSerial.connect(device, app.onconnect, app.ondisconnect);  
         bluetoothSerial.subscribe('\n', app.onData, app.onError);
@@ -51,12 +47,24 @@ var app = {
     },
     onData: function(data) { // data received from Arduino
         //console.log(data);
+       
         if(data && data!=1){
         data = data.slice(0,-1);
+
         if(data){
-            var hexData = hex_to_ascii(data);
-            var reading = rc4(dcK,hexData);
-            
+            var splitData = data.split(',');
+            if(splitData.length>1){
+                var hexData1 = hex_to_ascii(splitData[0]);
+                var hexData2 = hex_to_ascii(splitData[1]);
+                var reading1 = rc4(dcK,hexData1);
+                var reading2 = rc4(dcK,hexData2);
+                var reading = reading1+','+reading2;
+
+            }else{
+                var hexData = hex_to_ascii(data);
+                var reading = rc4(dcK,hexData);
+             }
+           ;
              if(reading && reading!=1 && reading.split(',').length>2){       
                 manageCookie.setCookie('reading',data);
                 window.location.href="healthview.html";

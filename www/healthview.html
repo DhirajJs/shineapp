@@ -92,7 +92,7 @@
         <script type="text/javascript">
          $.material.init();
       
-      // manageCookie.setCookie('reading','B736E610F83B789844CEA5A06E9DB0E4715D05267D');
+      //manageCookie.setCookie('reading','B736E610F83B789844,B536E512F879258549CCA4');
           if(!manageCookie.getCookie('reading')) {
             alert('No reading to sync');
              window.location.href= 'dashboard.html';
@@ -100,10 +100,22 @@
 
           $(function(){
           var readingC = manageCookie.getCookie('reading');
-          var hexData = hex_to_ascii(readingC);
+
+          var splitData = readingC.split(',');
+            if(splitData.length>1){
+                var hexData1 = hex_to_ascii(splitData[0]);
+                var hexData2 = hex_to_ascii(splitData[1]);
+                var reading1 = rc4(dcK,hexData1);
+                var reading2 = rc4(dcK,hexData2);
+                var reading = reading1+','+reading2;
+
+            }else{
+              var hexData = hex_to_ascii(readingC);
               reading = rc4(dcK,hexData);
+            }
+
           var dataReading = reading.split(',');
-          
+         
           if(dataReading.length>=8) {
             //  //30,06,2016,14,22,103,66,97
             $('.view-reading').addClass('bloodpressure-reading');
@@ -117,6 +129,7 @@
             var date = new Date((parseInt(dataReading[0])<10?'0'+dataReading[0]:dataReading[0])+'-'+dataReading[1]+'-'+dataReading[2]+'-'+dataReading[3]+':'+dataReading[4]+ ' '+dataReading[5]);
 
                 var newreading = dataReading[0]+','+dataReading[1]+','+dataReading[2]+','+date.getHours()+','+date.getMinutes()+','+dataReading[6];
+
                 manageCookie.setCookie('reading',ascii_to_hexa(rc4(dcK,newreading)));
 
           }
