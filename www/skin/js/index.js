@@ -215,7 +215,7 @@ function rc4(key, str) {
         s[j] = x;
         res += String.fromCharCode(str.charCodeAt(y) ^ s[(s[i] + s[j]) % 256]);
     }
-    return res.replace('¬',',');
+    return res.replace('~','');
 }
 
 function hex_to_ascii(str1)  
@@ -227,3 +227,13 @@ function hex_to_ascii(str1)
     }  
     return str;  
  }
+ function ascii_to_hexa(str)  
+  {  
+    var arr1 = [];  
+    for (var n = 0, l = str.length; n < l; n ++)   
+     {  
+        var hex = Number(str.charCodeAt(n)).toString(16);  
+        arr1.push(hex);  
+     }  
+    return arr1.join('');  
+   } 

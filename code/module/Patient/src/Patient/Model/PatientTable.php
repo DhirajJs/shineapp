@@ -353,7 +353,15 @@
         public function saveDetail($data)
         {
             $id = $data['id'];
-            $detail = explode(',',$this->rc4('health123',$this->hex2ascii($data['data'])));
+            $read = explode(',',$data['data']);
+            if(sizeof($read)>1) {
+
+                $part1 = $this->rc4('health123',$this->hex2ascii($read[0])).','.$this->rc4('health123',$this->hex2ascii($read[1]));
+                $detail = explode(',',$part1);
+            }else {
+                $detail = explode(',',$this->rc4('health123',$this->hex2ascii($data['data'])));
+            }
+
             $dbAdapter = $this->tableGateway->getAdapter();
             $user_session = new Container('user');
             if(sizeof($detail)>7) {
