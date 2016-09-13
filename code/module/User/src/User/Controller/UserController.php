@@ -19,7 +19,7 @@
 
      public function loginAction()
      {
-
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Login');
          $this->layout('layout/login');
          return array(
              'errorMessages'  => $this->flashmessenger()->getErrorMessages(),
@@ -57,6 +57,7 @@
 
      public  function createuserAction()
      {
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Create User');
          $data = $this->getRequest()->getPost();
 
          $return = $this->getUsersTable()->createDoctor($data);
@@ -109,7 +110,7 @@
 
      public function LogoutAction()
      {
-
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Logout');
         $this->_logout();
         $this->flashmessenger()->addSuccessMessage('You are now log out');
          return $this->redirect()

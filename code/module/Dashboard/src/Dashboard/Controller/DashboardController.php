@@ -9,6 +9,7 @@
 
      public function indexAction()
      {
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Dashboard');
         // $this->layout('layout/dashboard');
          if(!\User\Model\User::isLogin()) {
              return $this->redirect()
@@ -22,6 +23,7 @@
 
      public function consultationAction()
      {
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - View Consulation');
         // $this->layout('layout/dashboard');
          if(!\User\Model\User::isLogin()) {
              return $this->redirect()

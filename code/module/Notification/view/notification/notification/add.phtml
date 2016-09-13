@@ -25,7 +25,7 @@
                 </select>
 
             <p class="field"> set date and time:</p>
-            <input type="text" name="datetime" id="datetime" placeholder="Set date and time" min="<?php echo @date('Y-m-d')?>"/>
+            <input type="datetime-local" name="datetime" id="datetime" placeholder="Set date and time" min="<?php echo @date('Y-m-d')?>"/>
             <p class="field"> Description:</p>
             <input type="text" name="request" placeholder="Reason for appointment"/>
             <button type="submit" name="add_new" value="add">

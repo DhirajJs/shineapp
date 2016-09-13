@@ -16,7 +16,7 @@
      public function indexsearchAction()
      {
         // $this->layout('layout/patient');
-
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Search Patient ');
          return new ViewModel(array(
              'patients' => $this->getUsersTable()->fetchAll(),
          ));
@@ -25,6 +25,7 @@
      public function viewAction()
      {
          //$this->layout('layout/patient');
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - View Patient Details');
          $id = $this->getRequest()->getPost('id', null);
          $date = $this->getRequest()->getPost('month', null);
 
@@ -44,6 +45,7 @@
      public function updateAction()
      {
         // $this->layout('layout/patient');
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Update Patient');
          $data = $this->getRequest()->getPost();
 
          $patientDetails =  $this->getUsersTable()->update($data->toArray());
@@ -64,6 +66,7 @@
      public function addmedicationAction()
      {
          $data = $this->getRequest()->getPost();
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Add Medication');
 
          $this->getUsersTable()->addmedication($data->toArray());
          $this->flashmessenger()->addSuccessMessage('Medication added');
@@ -131,7 +134,7 @@
      {
        //  $this->layout('layout/patient');
          $id = $this->getRequest()->getPost('id', null);
-
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - View Responsible Party details');
          $responsible =  $this->getUsersTable()->getResponsible($id);
 
          return new JsonModel(array(
@@ -178,6 +181,7 @@
 
      public function  addAction()
      {
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Add Patient');
          return new ViewModel(array(
 
              'successMessage'  => $this->flashmessenger()->getSuccessMessages()
@@ -187,6 +191,7 @@
 
      public function settingAction()
      {
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Setting');
          return new ViewModel(array(
 
              'doctor'  => $this->getUsersTable()->getDoctor(),

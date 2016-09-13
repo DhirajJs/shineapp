@@ -15,6 +15,7 @@
 
      public function  calenderAction()
      {
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - View Calender');
          if(!\User\Model\User::isLogin()) {
              return $this->redirect()
                  ->toRoute('user',
@@ -30,6 +31,7 @@
 
      public function  viewAction()
      {
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - View Notification');
          if(!\User\Model\User::isLogin()) {
              return $this->redirect()
                  ->toRoute('user',
@@ -45,6 +47,7 @@
      }
      public function  approveAction()
      {
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Approve Notification');
          if(!\User\Model\User::isLogin()) {
              return $this->redirect()
                  ->toRoute('user',
@@ -65,6 +68,7 @@
 
      public function  addAction()
      {
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Add Notification');
          if(!\User\Model\User::isLogin()) {
              return $this->redirect()
                  ->toRoute('user',
@@ -82,6 +86,7 @@
 
      public function  saveAction()
      {
+         $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle')->set('Doctor App - Save Notification');
          $this->flashmessenger()->addSuccessMessage('Appointment Saved');
          $data = $this->getRequest()->getPost();
          $data['approved'] = 'Y';

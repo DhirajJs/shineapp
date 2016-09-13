@@ -44,8 +44,12 @@
         {
             $select = new \Zend\Db\Sql\Select ;
             $select->from('patient');
+            $user_session = new Container('user');
+            $docId = $user_session['user']->getId();
+            $select->where(" doctorId = '{$docId}'");
             if($search) {
-                $select->where(" name like '%{$search}%' or patientId = '{$search}'");
+
+                $select->where(" doctorId = '{$docId}' and (name like '%{$search}%' or patientId = '{$search}')");
             }
 
             $resultSet = $this->tableGateway->selectWith($select);
@@ -307,6 +311,20 @@
                 $resultSet = new ResultSet();
 
                 $resultSet->initialize($driverResult);
+
+                $nameR = $data["nameR"];
+                $emailR = $data["emailR"];
+                $phoneR = $data["telR"];
+
+                $statement = $dbAdapter->createStatement("INSERT INTO responsiblePerson (`name`,`email`,`phone`,`patientId`)
+            VALUES ('{$nameR}','{$emailR}','{$phoneR}','{$username}')"
+                );
+
+                $driverResult = $statement->execute();
+                $resultSet = new ResultSet();
+
+                $resultSet->initialize($driverResult);
+
                 $toReturn['message'] = 'Your patient has been created';
                 $toReturn['status'] = 'sucess';
             }
