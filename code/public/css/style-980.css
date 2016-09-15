@@ -1,3 +1,41 @@
+@media only screen and (min-width: 1200px) {
+    .container {
+        position: relative;
+        z-index: 1;
+        margin: 0 auto;
+    }
+    .navbar-brand
+    .fa-user-md {
+        font-size: 1em;
+        padding-right: 10px;
+    }
+    .wrapper-small {
+        max-width: 450px;
+        margin: 0 auto;
+    }
+    .container-patient {
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -webkit-flex-wrap: nowrap;
+        -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+        align-content: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+}
+
 @media only screen and (min-width: 980px) {
     .container {
         position: relative;
@@ -13,5 +51,6 @@
         max-width: 450px;
         margin: 0 auto;
     }
+  
 
 }

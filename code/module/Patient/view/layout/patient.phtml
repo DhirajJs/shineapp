@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <?php echo $this->headTitle('Patient '. $this->translate('-- add'))->setSeparator(' - ')->setAutoEscape(false) ?>
+    <?php echo $this->headTitle('Doctor App '. $this->translate(''))->setSeparator(' - ')->setAutoEscape(false) ?>
 
     <?php echo $this->headMeta()
         ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -18,15 +18,15 @@
     <!-- Le styles -->
     <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
         ->prependStylesheet($this->basePath() . '/css/style-980.css')
-        ->prependStylesheet($this->basePath() . '/css/style.css'.'?rand='.rand(0,100))
+        ->prependStylesheet($this->basePath() . '/css/style.css')
 
+        ->prependStylesheet($this->basePath() . '/css/DateTimePicker.css')
         ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
         ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
         ->prependStylesheet($this->basePath() . '/css/bootstrap/metisMenu/dist/metisMenu.min.css')
         ->prependStylesheet($this->basePath() . '/css/bootstrap/morrisjs/morris.css')
         ->prependStylesheet($this->basePath() . '/css/sb-admin-2.css')
         ->prependStylesheet($this->basePath() . '/css/timeline.css')
-        ->prependStylesheet($this->basePath() . '/css/bootstrap/dist/css/bootstrap.css');
 
 
 
@@ -37,6 +37,7 @@
 
     <!-- Scripts -->
     <?php echo $this->headScript()
+        ->prependFile($this->basePath() . '/js/DateTimePicker.js')
         ->prependFile($this->basePath() . '/js/bootstrap.min.js')
         ->prependFile($this->basePath() . '/js/index.js')
         ->prependFile($this->basePath() . '/js/jquery.smartPlaceholder.min.js')
@@ -80,19 +81,19 @@
 
                     </li>
                     <li>
-                        <a href="tables.html"><i class="fa fa-calendar-o fa-fw"></i> Calender</a>
+                        <a href="/notification"><i class="fa fa-calendar-o fa-fw"></i> Appointment</a>
                     </li>
                     <li>
-                        <a href="forms.html"><i class="fa  fa-bell fa-fw"></i> Notification</a>
+                        <a href="/notification/view"><i class="fa  fa-bell fa-fw"></i> Notification</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Account Setting</a>
+                        <a href="/patient/setting"><i class="fa fa-wrench fa-fw"></i> Account Setting</a>
 
                         <!-- /.nav-second-level -->
                     </li>
                     <li>
                         <a href="/user/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-
+                    </li>
 
                 </ul>
             </div>
@@ -102,7 +103,7 @@
     </nav>
 
     <div id="page-wrapper">
-        <div class="">
+        <div class="container">
             <?php echo $this->content; ?>
 
         </div> <!-- /container -->
@@ -116,20 +117,22 @@
 <script type="text/javascript">
     $(function(){
         $(function() {
-            $("input").smartPlaceholder(
-
-                {
-                    backgroundColor: '##f2f2f2',  // hex, rgb, rgba
-                    color: '#000',            // hex, rgb, rgba
-                    size: 12,                 // in pixels
-                    speed: 0.8,               // in secs
-                    radius: 3,                // in pixels
-                    indent: 5,                // in pixels
-                    position: 'top',       // 'top' or 'bottom'
-                    mode: 'inline'            // 'inline' or 'extend'
-                }
-            );
+            if( $("input").length) {
+                $("input").smartPlaceholder(
+                    {
+                        backgroundColor: '##f2f2f2',  // hex, rgb, rgba
+                        color: '#000',            // hex, rgb, rgba
+                        size: 12,                 // in pixels
+                        speed: 0.8,               // in secs
+                        radius: 3,                // in pixels
+                        indent: 5,                // in pixels
+                        position: 'top',       // 'top' or 'bottom'
+                        mode: 'inline'            // 'inline' or 'extend'
+                    }
+                );
+            }
         });
+
     })
 </script>
 </body>
