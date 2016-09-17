@@ -19,6 +19,7 @@
 
     ?>
     <div class="dashboard">
+        <h1>View Patient Details</h1>
         <div class="container-patient">
 
             <div class="col-1">
@@ -320,14 +321,18 @@
         var data = new google.visualization.DataTable();
         data.addColumn('date', 'Day');
         data.addColumn('number', 'Systolic');
+        data.addColumn({type:'string', role:'tooltip'});
         data.addColumn('number', 'Diastolic');
+        data.addColumn({type:'string', role:'tooltip'});
         //systolic`, `diastolic`, `patientId`, `heartRate`
         var bpl = new Array();
         <?php
         $array = array();
         foreach ($this->patientDetails['bloodPresure'] as $bloodPresure) {
+            $toolTip1 = 'On '. @date('d M Y H:i' , @strtotime($bloodPresure['date'])). " Systolic was at {$bloodPresure['systolic']}";
+            $toolTip2 = 'On '. @date('d M Y H:i' , @strtotime($bloodPresure['date'])). " Diastolic was at {$bloodPresure['diastolic']}";
             $time =  @date('d', @strtotime($bloodPresure['date']));
-            $array[] = "[new Date('{$bloodPresure['date']}'),{$bloodPresure['systolic']},{$bloodPresure['diastolic']}]";
+            $array[] = "[new Date('{$bloodPresure['date']}'),{$bloodPresure['systolic']},'{$toolTip1}',{$bloodPresure['diastolic']} ,'{$toolTip2}']";
         }
         $addRow = implode(',',$array);
         ?>
