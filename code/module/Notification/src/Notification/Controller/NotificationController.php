@@ -128,6 +128,20 @@
              );
      }
 
+     public function getnotificationAction()
+     {
+         $id = $this->getRequest()->getQuery('id', null);
+         $result = array();
+         if($id) {
+             $result =$this->getUsersTable()->getNotificationById($id);
+         }
+         return new JsonModel(array(
+             'result'  => $result,
+
+         ));
+     }
+
+
      public function getUsersTable() {
 
          if (!$this->_userTable) {

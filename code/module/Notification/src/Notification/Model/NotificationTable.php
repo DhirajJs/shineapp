@@ -192,5 +192,29 @@ WHERE notif_id='{$_POST['notif_id']}'");
             return $doctor;
         }
 
+        public function getNotificationById($id)
+        {
+            $select = new \Zend\Db\Sql\Select ;
+            $user_session = new Container('user');
+            $select->from('notifications');
+            $select->join(array("p" => "patient"), "notifications.patientId = p.patientId");
+
+
+            $select->where(" notifications.doctorId = '{$user_session['user']->getId()}' and approved='Y' p.patientId= '{$id}'");
+            $dbAdapter = $this->tableGateway->getAdapter();
+            $statement = $dbAdapter->createStatement();
+
+            $select->prepareStatement($dbAdapter, $statement);
+            $driverResult = $statement->execute(); // execute statement to get result
+
+            $resultSet = new ResultSet();
+            $resultSet->initialize($driverResult);
+            $rows = array();
+            foreach($resultSet as $row) {
+                $rows[] = $row->getArrayCopy();
+            }
+            return $rows;
+        }
+
 
     }
