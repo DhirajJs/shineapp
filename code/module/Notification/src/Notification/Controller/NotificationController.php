@@ -130,7 +130,7 @@
 
      public function getnotificationAction()
      {
-         $id = $this->getRequest()->getQuery('id', null);
+         $id = $this->getRequest()->getPost('id');
          $result = array();
          if($id) {
              $result =$this->getUsersTable()->getNotificationById($id);
