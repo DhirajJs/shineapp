@@ -56,7 +56,10 @@
                                         <form method="post"
                                               action="/notification/approve">
                                             Appointment Description<input type="text" name="request" id ="request" required value="<?php echo $row['request']?>">
-                                            Set Appointment Time<input type="datetime-local" name="datetime" required>
+                                            Set Appointment Time
+
+
+                                            <input type="datetime-local" name="datetime" required value="<?php echo str_replace(' ','T',$row['date']);?>">
                                             <input type="submit" name="approvedNow" class="approvedNow" value="Approve"/>
                                             <input type="hidden" name="notif_id"
                                                    value="<?php echo $row['notif_id']; ?>"/>
