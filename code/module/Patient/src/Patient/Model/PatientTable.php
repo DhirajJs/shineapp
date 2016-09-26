@@ -383,9 +383,10 @@
             $dbAdapter = $this->tableGateway->getAdapter();
             $user_session = new Container('user');
             if(sizeof($detail)>7) {
+                $heartRate = (float)$detail[7];
                 $statement = $dbAdapter->createStatement(
                     "INSERT INTO `bloodpressure` ( `date`, `systolic`, `diastolic`, `patientId`, `heartRate`)
-VALUE('{$detail[2]}-{$detail[1]}-{$detail[0]} {$detail[3]}:{$detail[4]}','{$detail[5]}','{$detail[6]}','{$id}','{$detail[7]}')"
+VALUE('{$detail[2]}-{$detail[1]}-{$detail[0]} {$detail[3]}:{$detail[4]}','{$detail[5]}','{$detail[6]}','{$id}','{$heartRate}')"
                 );
             }else {
                 $statement = $dbAdapter->createStatement(
